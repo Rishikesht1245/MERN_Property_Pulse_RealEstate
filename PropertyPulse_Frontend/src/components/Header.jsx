@@ -1,7 +1,8 @@
 import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Header() {
+  const location = useLocation();
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -23,17 +24,29 @@ export default function Header() {
         </form>
         <ul className="flex gap-6">
           <Link to="/">
-            <li className="hidden sm:inline text-slate-700 hover:underline font-semibold">
+            <li
+              className={`${
+                location.pathname === "/" && "text-red-600"
+              } hidden sm:inline text-slate-700 hover:underline font-semibold`}
+            >
               Home
             </li>
           </Link>
           <Link to="/about">
-            <li className="hidden sm:inline text-slate-700 hover:underline font-semibold">
+            <li
+              className={`${
+                location.pathname === "/about" && "text-red-600"
+              } hidden sm:inline text-slate-700 hover:underline font-semibold`}
+            >
               About
             </li>
           </Link>
-          <Link to="/profile">
-            <li className=" text-slate-700 hover:underline font-semibold">
+          <Link to="/sign-in">
+            <li
+              className={`${
+                location.pathname === "/profile" && "text-red-600"
+              }  text-slate-700 hover:underline font-semibold`}
+            >
               Sign in
             </li>
           </Link>
