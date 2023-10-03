@@ -1,17 +1,17 @@
 import { FaSearch } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 export default function Header() {
   const location = useLocation();
   return (
-    <header className="bg-slate-200 shadow-md">
+    <header className="bg-slate-200 shadow-md sticky top-0 z-10">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
-        <Link to="/">
+        <NavLink to="/">
           <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
             <span className="text-slate-500">Property</span>
             <span className="text-slate-700">Pulse</span>
           </h1>
-        </Link>
+        </NavLink>
         <form className="bg-slate-100 px-3 py-2 rounded-lg flex items-center">
           <input
             type="text"
@@ -23,33 +23,42 @@ export default function Header() {
           </button>
         </form>
         <ul className="flex gap-6">
-          <Link to="/">
-            <li
-              className={`${
-                location.pathname === "/" && "text-red-600"
-              } hidden sm:inline text-slate-700 hover:underline font-semibold`}
+          <li>
+            <NavLink
+              to="/"
+              className={(navClass) =>
+                navClass.isActive
+                  ? "text-red-700 text-[16px] font-semibold hidden sm:inline"
+                  : "text-black text-[16px] font-semibold hidden sm:inline"
+              }
             >
               Home
-            </li>
-          </Link>
-          <Link to="/about">
-            <li
-              className={`${
-                location.pathname === "/about" && "text-red-600"
-              } hidden sm:inline text-slate-700 hover:underline font-semibold`}
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/about"
+              className={(navClass) =>
+                navClass.isActive
+                  ? "text-red-700 text-[16px]  font-semibold hidden sm:inline"
+                  : "text-black text-[16px] font-semibold hidden sm:inline"
+              }
             >
               About
-            </li>
-          </Link>
-          <Link to="/sign-in">
-            <li
-              className={`${
-                location.pathname === "/profile" && "text-red-600"
-              }  text-slate-700 hover:underline font-semibold`}
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/sign-in"
+              className={(navClass) =>
+                navClass.isActive
+                  ? "text-red-700  sm:text-[16px] font-semibold"
+                  : "text-black  sm:text-[16px] font-semibold"
+              }
             >
               Sign in
-            </li>
-          </Link>
+            </NavLink>
+          </li>
         </ul>
       </div>
     </header>
