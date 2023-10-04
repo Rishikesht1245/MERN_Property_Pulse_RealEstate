@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { Form, Formik } from "formik";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+
 import Input from "../components/subcomponents/Input.jsx";
 import Button from "../components/subcomponents/Button.jsx";
-import { loginSchema } from "../schema/authSchema.js";
-import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../apiRoutes/userRoutes.js";
 import PasswordInput from "../components/subcomponents/PasswordInput.jsx";
-import toast from "react-hot-toast";
+
+import { loginSchema } from "../schema/authSchema.js";
+import { loginUser } from "../apiRoutes/userRoutes.js";
+
+import { useDispatch } from "react-redux";
+import { singInSuccess } from "../redux/user/userSlice.js";
 
 const SignIn = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <div
       className="w-[100%] h-full py-10 bg-fixed"
@@ -42,6 +48,8 @@ const SignIn = () => {
             console.log(formData);
             loginUser(formData)
               .then(({ data }) => {
+                console.log(data);
+                dispatch(singInSuccess(data));
                 toast.success("Sign In Successful!", {
                   style: {
                     borderRadius: "10px",
