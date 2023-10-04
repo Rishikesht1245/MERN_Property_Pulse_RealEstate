@@ -19,7 +19,7 @@ function Input({ name, placeholder, type, className }) {
         placeholder={placeholder}
         type={type}
       />
-      <span className="m-1 text-sm font-medium text-red-800">
+      <span className="m-1 text-sm font-semibold text-red-600">
         <ErrorMessage name={name} />
       </span>
     </div>

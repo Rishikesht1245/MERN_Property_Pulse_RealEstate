@@ -22,13 +22,13 @@ export default function Header() {
             <FaSearch className="text-slate-400 cursor-pointer hover:text-slate-600" />
           </button>
         </form>
-        <ul className="flex gap-6">
+        <ul className="flex gap-6 tracking-wider">
           <li>
             <NavLink
               to="/"
               className={(navClass) =>
                 navClass.isActive
-                  ? "text-red-700 text-[16px] font-semibold hidden sm:inline"
+                  ? "text-red-600 text-[16px] font-semibold hidden sm:inline"
                   : "text-black text-[16px] font-semibold hidden sm:inline"
               }
             >
@@ -40,7 +40,7 @@ export default function Header() {
               to="/about"
               className={(navClass) =>
                 navClass.isActive
-                  ? "text-red-700 text-[16px]  font-semibold hidden sm:inline"
+                  ? "text-red-600 text-[16px]  font-semibold hidden sm:inline"
                   : "text-black text-[16px] font-semibold hidden sm:inline"
               }
             >
@@ -52,7 +52,7 @@ export default function Header() {
               to="/sign-in"
               className={(navClass) =>
                 navClass.isActive
-                  ? "text-red-700  sm:text-[16px] font-semibold"
+                  ? "text-red-600  sm:text-[16px] font-semibold"
                   : "text-black  sm:text-[16px] font-semibold"
               }
             >

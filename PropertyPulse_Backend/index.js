@@ -34,8 +34,8 @@ app.use("/api/auth", authRouter);
 // middleware for error handling
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500; // internal server error
-  const message = err.message || "Internal Server Error";
-
+  const message =
+    (err.code === 11000 && "User Already Exists") || "Internal Server Error";
   return res.status(statusCode).json({
     success: false,
     statusCode,
