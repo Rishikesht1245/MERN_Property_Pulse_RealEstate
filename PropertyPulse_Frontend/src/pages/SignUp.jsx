@@ -21,12 +21,12 @@ const SignUp = () => {
         minHeight: "100vh",
       }}
     >
-      <div className="sm:max-w-lg w-full mx-auto border border-1 border-slate-300 p-8 shadow-sm rounded-[4px] bg-slate-100">
+      <div className="sm:max-w-lg w-[90%] mx-auto border border-1 border-slate-300 p-8 shadow-sm rounded-[4px] bg-slate-100">
         <h1 className="text-3xl tracking-widest text-center font-bold my-5 uppercase">
           Sign Up
         </h1>
         {error && (
-          <p className="uppercase tracking-widest text-center w-full border border-1 border-red-600 rounded-lg p-3 text-[14px] font-bold shadow-sm text-red-500 mb-5">
+          <p className="uppercase bg-red-100 tracking-widest text-center w-full border border-1 border-red-700 rounded-lg p-3 text-[14px] font-bold shadow-sm text-red-500 mb-5">
             {error}
           </p>
         )}
@@ -44,7 +44,6 @@ const SignUp = () => {
             console.log(formData);
             registerUser(formData)
               .then(({ data }) => {
-                setError(null);
                 toast.success("Registration Successful!", {
                   style: {
                     borderRadius: "10px",
@@ -95,7 +94,10 @@ const SignUp = () => {
         </Formik>
         <div className="flex gap-2 items-center ml-1 mt-5 tracking-widest">
           <p className="text-sm font-semibold">Already have an account?</p>
-          <Link to={"/sign-in"} className="text-blue-700 text-sm font-semibold">
+          <Link
+            to={"/sign-in"}
+            className="text-blue-700 text-sm font-semibold tracking-normal"
+          >
             Sign In
           </Link>
         </div>

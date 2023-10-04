@@ -42,8 +42,8 @@ export const singIn = async (req, res, next) => {
       .cookie("access_token", token, {
         //deny third party applications for security
         httpOnly: true,
-        //time in seconds
-        expires: new Date(Date.now() + 24 * 60 * 60),
+        // //time in seconds
+        // expires: new Date(Date.now() + 24 * 60 * 60),
       })
       .status(200)
       .json(rest);

@@ -56,7 +56,7 @@ export default function Header() {
                   : "text-black  sm:text-[16px] font-semibold"
               }
             >
-              Sign in
+              Sign In
             </NavLink>
           </li>
         </ul>

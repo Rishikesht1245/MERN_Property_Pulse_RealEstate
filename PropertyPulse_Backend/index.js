@@ -34,8 +34,11 @@ app.use("/api/auth", authRouter);
 // middleware for error handling
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500; // internal server error
+  //mongo duplicate error || custom Error or Internal server error
   const message =
-    (err.code === 11000 && "User Already Exists") || "Internal Server Error";
+    (err.code === 11000 && "User Already Exists") ||
+    err.message ||
+    "Internal Server Error";
   return res.status(statusCode).json({
     success: false,
     statusCode,
