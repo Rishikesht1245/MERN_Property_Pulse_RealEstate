@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../apiRoutes/userRoutes.js";
 import PasswordInput from "../components/subcomponents/PasswordInput.jsx";
 import toast from "react-hot-toast";
+import OAuth from "../components/subcomponents/OAuth.jsx";
 
 const SignUp = () => {
   const [error, setError] = useState(null);
@@ -89,6 +90,7 @@ const SignUp = () => {
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Registering" : "Register"}
               </Button>
+              <OAuth />
             </Form>
           )}
         </Formik>

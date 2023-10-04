@@ -7,3 +7,7 @@ export const registerUser = async (formData) => {
 export const loginUser = async (formData) => {
   return await axios.post("/api/auth/signin", formData);
 };
+
+export const googleOAuth = async (formData) => {
+  return await axios.post("/api/auth/google", formData);
+};

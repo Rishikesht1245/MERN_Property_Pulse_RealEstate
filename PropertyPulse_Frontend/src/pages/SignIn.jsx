@@ -12,6 +12,7 @@ import { loginUser } from "../apiRoutes/userRoutes.js";
 
 import { useDispatch } from "react-redux";
 import { singInSuccess } from "../redux/user/userSlice.js";
+import OAuth from "../components/subcomponents/OAuth.jsx";
 
 const SignIn = () => {
   const [error, setError] = useState(null);
@@ -88,6 +89,7 @@ const SignIn = () => {
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Logging In..." : "Login"}
               </Button>
+              <OAuth />
             </Form>
           )}
         </Formik>
