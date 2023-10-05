@@ -1,17 +1,23 @@
 import { Formik, Form } from "formik";
-import { registerSchema } from "../schema/authSchema";
-import Input from "../components/subcomponents/Input";
-import PasswordInput from "../components/subcomponents/PasswordInput";
-import Button from "../components/subcomponents/Button";
-import { useSelector } from "react-redux";
+import { updateSchema } from "../schema/authSchema";
 import { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
+
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+
+import Input from "../components/subcomponents/Input";
+import PasswordInput from "../components/subcomponents/PasswordInput";
+import Button from "../components/subcomponents/Button";
+
 import { app } from "../firebase";
+import { updateUser } from "../apiRoutes/userRoutes.js";
+import { updateUserSuccess } from "../redux/user/userSlice";
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -19,8 +25,9 @@ const Profile = () => {
   const [file, setFile] = useState(null);
   const [filePercentage, setFilePercentage] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState("");
-  console.log(avatarUrl);
+  const [avatarUrl, setAvatarUrl] = useState(currentUser.avatar);
+  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (file) {
@@ -53,7 +60,6 @@ const Profile = () => {
       () => {
         // This callback runs when the upload is complete
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log(downloadURL);
           setAvatarUrl(downloadURL);
         });
       }
@@ -70,37 +76,35 @@ const Profile = () => {
           username: currentUser.username,
           email: currentUser.email,
           password: "",
-          avatar: "",
         }}
-        validationSchema={registerSchema}
+        validationSchema={updateSchema}
         onSubmit={(formData, { setSubmitting }) => {
           setSubmitting(true);
-          console.log({ ...formData, avatar: avatarUrl });
-          // registerUser(formData)
-          //   .then(({ data }) => {
-          //     toast.success("Registration Successful!", {
-          //       style: {
-          //         borderRadius: "10px",
-          //         background: "#333",
-          //         color: "#fff",
-          //       },
-          //     });
-          //     navigate("/sign-in");
-          //     return;
-          //   })
-          //   // inside error, response will be there inside it the actual error message sent from backend will see
-          //   .catch(
-          //     ({
-          //       response: {
-          //         data: { message },
-          //       },
-          //     }) => {
-          //       console.log(message);
-          //       setError(message);
-          //     }
-          //   )
+          updateUser({ ...formData, avatar: avatarUrl }, currentUser._id)
+            .then(({ data }) => {
+              dispatch(updateUserSuccess(data));
+              toast.success("User is Updated Successfully!", {
+                style: {
+                  borderRadius: "10px",
+                  background: "#333",
+                  color: "#fff",
+                },
+              });
+              return;
+            })
+            // inside error, response will be there inside it the actual error message sent from backend will see
+            .catch(
+              ({
+                response: {
+                  data: { message },
+                },
+              }) => {
+                console.log(message);
+                setError(message);
+              }
+            )
 
-          //   .finally(() => setSubmitting(false));
+            .finally(() => setSubmitting(false));
         }}
       >
         {({ isSubmitting }) => (
@@ -132,15 +136,15 @@ const Profile = () => {
                 </span>
               ) : null}
             </p>
-
+            {/* api error */}
+            {error && (
+              <p className="uppercase bg-red-100 tracking-widest text-center w-full rounded-lg p-3 text-[14px] font-bold shadow-sm text-red-500 mb-5">
+                {error}
+              </p>
+            )}
             <Input type="text" placeholder="User Name" name="username" />
             <Input type="email" placeholder="Email" name="email" />
-            <PasswordInput
-              type="password"
-              placeholder="Update Password"
-              name="password"
-              id="password"
-            />
+            <PasswordInput type="password" name="password" id="password" />
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Updating..." : "Update"}
             </Button>

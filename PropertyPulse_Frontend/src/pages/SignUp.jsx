@@ -27,7 +27,7 @@ const SignUp = () => {
           Sign Up
         </h1>
         {error && (
-          <p className="uppercase bg-red-100 tracking-widest text-center w-full border border-1 border-red-700 rounded-lg p-3 text-[14px] font-bold shadow-sm text-red-500 mb-5">
+          <p className="uppercase bg-red-100 tracking-widest text-center w-full rounded-lg p-3 text-[14px] font-bold shadow-sm text-red-500 mb-5">
             {error}
           </p>
         )}

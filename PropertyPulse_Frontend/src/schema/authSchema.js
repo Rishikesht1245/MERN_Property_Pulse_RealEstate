@@ -34,3 +34,24 @@ export const loginSchema = yup.object().shape({
     ),
   password: yup.string().required("Password is Required"),
 });
+
+export const updateSchema = yup.object().shape({
+  username: yup
+    .string()
+    .required("User name is required")
+    .min(3, "Username must be at least 3 characters long"),
+  email: yup
+    .string()
+    .trim()
+    .required("Email is Required")
+    .test("isValidEmail", "Invalid email", (arg) =>
+      /[a-z0-9]+@[a-z0-9]+/i.test(arg)
+    ),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    ),
+});

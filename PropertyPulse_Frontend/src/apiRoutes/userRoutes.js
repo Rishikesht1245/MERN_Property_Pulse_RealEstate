@@ -11,3 +11,7 @@ export const loginUser = async (formData) => {
 export const googleOAuth = async (formData) => {
   return await axios.post("/api/auth/google", formData);
 };
+
+export const updateUser = async (formData, id) => {
+  return await axios.post(`/api/user/update/${id}`, formData);
+};
