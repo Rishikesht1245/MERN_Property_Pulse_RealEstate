@@ -2,14 +2,17 @@ import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./routes/user/user.routes.js";
 import authRouter from "./routes/user/auth.routes.js";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import { stat } from "fs";
 dotenv.config();
 
 const app = express();
 
 // allowing json inputs
 app.use(express.json());
+
+// Enabling cookie Parser
+app.use(cookieParser());
 
 // connecting to database
 mongoose
