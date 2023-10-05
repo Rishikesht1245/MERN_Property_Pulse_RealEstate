@@ -88,7 +88,7 @@ const SignUp = () => {
               />
 
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Registering" : "Register"}
+                {isSubmitting ? "Registering..." : "Register"}
               </Button>
               <OAuth />
             </Form>

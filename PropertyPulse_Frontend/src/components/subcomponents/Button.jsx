@@ -3,7 +3,7 @@ const Button = ({ children, disabled, type }) => {
     <button
       type={type}
       disabled={disabled}
-      className="bg-slate-700 tracking-widest text-white p-3 rounded-lg uppercase hover:opacity-[95%]"
+      className="text-sm sm:text-md bg-slate-700 tracking-widest text-white p-3 rounded-lg uppercase hover:opacity-[95%]"
     >
       {children}
     </button>

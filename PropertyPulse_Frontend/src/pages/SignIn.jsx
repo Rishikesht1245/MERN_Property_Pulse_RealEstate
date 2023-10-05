@@ -92,7 +92,7 @@ const SignIn = () => {
             </Form>
           )}
         </Formik>
-        <div className="flex gap-2 items-center ml-1 mt-5 tracking-widest">
+        <div className="flex gap-1 sm:gap-2 items-center ml-1 mt-5 tracking-widest">
           <p className="text-sm font-semibold">Don't have an account?</p>
           <Link
             to={"/sign-up"}
