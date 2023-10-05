@@ -1,8 +1,8 @@
 import { Field, ErrorMessage } from "formik";
 
-function Input({ name, placeholder, type, className }) {
+function TextArea({ name, placeholder, type, className }) {
   return (
-    <div className={`flex flex-col ${className}`}>
+    <div className={`${className} flex flex-col`}>
       {placeholder && (
         <label
           htmlFor={name}
@@ -19,7 +19,7 @@ function Input({ name, placeholder, type, className }) {
         id={name}
         name={name}
         placeholder={placeholder}
-        type={type}
+        as={type}
       />
       <span className="m-1 text-sm font-semibold text-red-600">
         <ErrorMessage name={name} />
@@ -28,4 +28,4 @@ function Input({ name, placeholder, type, className }) {
   );
 }
 
-export default Input;
+export default TextArea;

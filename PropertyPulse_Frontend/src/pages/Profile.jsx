@@ -3,6 +3,7 @@ import { updateSchema } from "../schema/authSchema";
 import { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 import {
@@ -208,6 +209,13 @@ const Profile = () => {
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Updating..." : "Update"}
             </Button>
+            {/* Link to create listing page */}
+            <Link
+              to={"/create-listing"}
+              className="text-sm sm:text-md bg-green-700 tracking-widest text-white p-3 rounded-lg uppercase hover:opacity-[95%] text-center font-semibold"
+            >
+              Create Listing
+            </Link>
           </Form>
         )}
       </Formik>
