@@ -7,8 +7,7 @@ const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "propertypusle.firebaseapp.com",
   projectId: "propertypusle",
-  storageBucket:
-    "[propertypusle.appspot.com](http://propertypusle.appspot.com/)",
+  storageBucket: "propertypusle.appspot.com",
   messagingSenderId: "994916116777",
   appId: "1:994916116777:web:551c148021497115826f38",
 };
