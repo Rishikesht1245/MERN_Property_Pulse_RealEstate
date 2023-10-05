@@ -16,11 +16,18 @@ import PasswordInput from "../components/subcomponents/PasswordInput";
 import Button from "../components/subcomponents/Button";
 
 import { app } from "../firebase";
-import { updateUser } from "../apiRoutes/userRoutes.js";
-import { updateUserSuccess } from "../redux/user/userSlice";
+import { updateUser, deleteUser } from "../apiRoutes/userRoutes.js";
+import {
+  updateUserSuccess,
+  deleteUserSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+} from "../redux/user/userSlice";
 
 const Profile = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, sliceError, loading } = useSelector(
+    (state) => state.user
+  );
   const fileRef = useRef(null);
   const [file, setFile] = useState(null);
   const [filePercentage, setFilePercentage] = useState(0);
@@ -64,6 +71,33 @@ const Profile = () => {
         });
       }
     );
+  };
+
+  // handle delete user
+  const handleDeleteUser = () => {
+    dispatch(deleteUserStart());
+    deleteUser(currentUser._id)
+      .then(({ data }) => {
+        dispatch(deleteUserSuccess(data));
+        toast.success(data, {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+        return;
+      })
+      // inside error, response will be there inside it the actual error message sent from backend will see
+      .catch(
+        ({
+          response: {
+            data: { message },
+          },
+        }) => {
+          dispatch(deleteUserFailure(message));
+        }
+      );
   };
 
   return (
@@ -152,13 +186,23 @@ const Profile = () => {
         )}
       </Formik>
       <div className="flex justify-between px-1">
-        <span className="text-red-600 font-semibold cursor-pointer tracking-wide">
-          Delete account
+        <span
+          className="text-red-600 font-semibold cursor-pointer tracking-wide"
+          onClick={handleDeleteUser}
+        >
+          {loading ? "Deleting..." : "Delete account"}
         </span>
+
         <span className="text-red-600 font-semibold cursor-pointer tracking-wide">
           Sign out
         </span>
       </div>
+      {/* delete error */}
+      {sliceError && (
+        <p className="uppercase bg-red-100 tracking-widest text-center w-full rounded-lg p-3 text-[14px] font-bold shadow-sm text-red-500 mt-5">
+          {sliceError}
+        </p>
+      )}
     </div>
   );
 };

@@ -15,3 +15,7 @@ export const googleOAuth = async (formData) => {
 export const updateUser = async (formData, id) => {
   return await axios.post(`/api/user/update/${id}`, formData);
 };
+
+export const deleteUser = async (id) => {
+  return await axios.delete(`/api/user/delete/${id}`);
+};
