@@ -33,7 +33,7 @@ export const deleteListing = async (listingId) => {
 };
 
 export const getListing = async (listingId) => {
-  return await axios.get(`/api/listing/update/${listingId}`);
+  return await axios.get(`/api/listing/view/${listingId}`);
 };
 
 export const updateListing = async (formData, listingId) => {

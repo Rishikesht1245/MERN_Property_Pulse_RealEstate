@@ -137,7 +137,6 @@ const UpdateListing = () => {
         onSubmit={(formData, { setSubmitting }) => {
           setError(false);
 
-          console.log(formData);
           // image must be there
           if (imageUrls.length < 1) {
             setSubmitting(false);

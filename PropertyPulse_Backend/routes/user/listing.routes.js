@@ -16,7 +16,7 @@ router.post("/create", verifyToken, createListing);
 router.delete("/delete/:id", verifyToken, deleteListing);
 
 // get listing -- no need for verification as only reading is allowed
-router.get("/update/:id", getListing);
+router.get("/view/:id", getListing);
 
 // edit listing
 router.post("/update/:id", verifyToken, updateListing);

@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
+import SingleListing from "./pages/SingleListing";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
               path="/update-listing/:listingId"
               element={<UpdateListing />}
             />
+            <Route path="/listing/:listingId" element={<SingleListing />} />
           </Route>
         </Routes>
       </Router>
