@@ -27,3 +27,7 @@ export const createListing = async (formData) => {
 export const getAllListings = async (id) => {
   return await axios.get(`/api/user/listings/${id}`);
 };
+
+export const deleteListing = async (listingId) => {
+  return await axios.delete(`/api/listing/delete/${listingId}`);
+};

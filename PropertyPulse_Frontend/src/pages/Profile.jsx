@@ -284,7 +284,10 @@ const Profile = () => {
       {showListingError ? (
         <p className="text-red-600 font-semibold">Error Showing Listing...</p>
       ) : userListings && userListings.length > 0 ? (
-        <Listings userListings={userListings} />
+        <Listings
+          userListings={userListings}
+          setUserListings={setUserListings}
+        />
       ) : (
         ""
       )}

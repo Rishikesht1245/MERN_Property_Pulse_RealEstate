@@ -119,12 +119,17 @@ const CreateListing = () => {
           setError(false);
 
           // image must be there
-          if (imageUrls.length < 1)
+          if (imageUrls.length < 1) {
+            setSubmitting(false);
             return setError("You must upload at least one image!");
+          }
           // discount price must be less than regular price
-          if (formData.regularPrice < formData.discountPrice)
+          if (formData.regularPrice < formData.discountPrice) {
+            setSubmitting(false);
             return setError("Discount price must be lower than regular price!");
+          }
           setSubmitting(true);
+
           //copying user id and imageUrls to the formData to store in DB
           createListing({ ...formData, userRef: currentUser._id, imageUrls })
             .then(({ data }) => {
