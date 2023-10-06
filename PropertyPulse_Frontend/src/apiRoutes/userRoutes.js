@@ -31,3 +31,11 @@ export const getAllListings = async (id) => {
 export const deleteListing = async (listingId) => {
   return await axios.delete(`/api/listing/delete/${listingId}`);
 };
+
+export const getListing = async (listingId) => {
+  return await axios.get(`/api/listing/update/${listingId}`);
+};
+
+export const updateListing = async (formData, listingId) => {
+  return await axios.post(`/api/listing/update/${listingId}`, formData);
+};

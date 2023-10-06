@@ -49,9 +49,11 @@ const Listings = ({ userListings, setUserListings }) => {
               </p>
             </Link>
             <div className="flex gap-5 items-center">
-              <button className="text-green-700 text-sm font-semibold uppercase">
-                Edit
-              </button>
+              <Link to={`/update-listing/${listing._id}`}>
+                <button className="text-green-700 text-sm font-semibold uppercase">
+                  Edit
+                </button>
+              </Link>
               <ShowConfirm
                 message={`Are you sure to delete the listing ${listing.name} ?`}
                 handleFunction={() => handleDeleteListing(listing._id)}
