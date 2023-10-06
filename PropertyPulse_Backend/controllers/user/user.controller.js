@@ -14,22 +14,37 @@ export const updateUser = async (req, res, next) => {
 
   try {
     // hashing the password if user is trying to update the password
+    let updatedUser;
     if (req.body.password) {
       req.body.password = await bcrypt.hash(req.body.password, 10);
-    }
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-          avatar: req.body.avatar,
+      updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            avatar: req.body.avatar,
+          },
+          // set new to true, to return the new information
         },
-        // set new to true, to return the new information
-      },
-      { new: true }
-    );
+        { new: true }
+      );
+    } else {
+      // password will change to " " other wise
+      updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: {
+            username: req.body.username,
+            email: req.body.email,
+            avatar: req.body.avatar,
+          },
+          // set new to true, to return the new information
+        },
+        { new: true }
+      );
+    }
     const { password, ...rest } = updatedUser._doc;
 
     res.status(200).json(rest);

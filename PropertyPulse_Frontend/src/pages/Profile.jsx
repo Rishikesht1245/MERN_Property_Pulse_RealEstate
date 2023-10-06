@@ -17,9 +17,14 @@ import Input from "../components/subcomponents/Input";
 import PasswordInput from "../components/subcomponents/PasswordInput";
 import Button from "../components/subcomponents/Button";
 import ShowConfirm from "../components/subcomponents/ShowConfirm";
+import Listings from "../components/Listings";
 
 import { app } from "../firebase";
-import { updateUser, deleteUser } from "../apiRoutes/userRoutes.js";
+import {
+  updateUser,
+  deleteUser,
+  getAllListings,
+} from "../apiRoutes/userRoutes.js";
 import {
   updateUserSuccess,
   deleteUserSuccess,
@@ -39,6 +44,9 @@ const Profile = () => {
   const [filePercentage, setFilePercentage] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(currentUser.avatar);
+  const [showListingError, setShowListingError] = useState(false);
+  const [showListingLoading, setShowListingLoading] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
@@ -124,6 +132,25 @@ const Profile = () => {
       });
     } catch (error) {
       dispatch(signOutFailure(error.message));
+    }
+  };
+
+  //show all listings
+  const handleShowListings = async () => {
+    try {
+      setShowListingLoading(true);
+      setShowListingError(false);
+
+      const { data } = await getAllListings(currentUser._id);
+      if (data.success === false) {
+        setShowListingError(true);
+        setShowListingLoading(false);
+        return;
+      }
+      setUserListings(data);
+      setShowListingLoading(false);
+    } catch (error) {
+      setShowListingError(true);
     }
   };
 
@@ -241,6 +268,25 @@ const Profile = () => {
         <p className="uppercase bg-red-100 tracking-widest text-center w-full rounded-lg p-3 text-[14px] font-bold shadow-sm text-red-500 mt-5">
           {sliceError}
         </p>
+      )}
+      {!userListings ||
+        (!userListings.length > 0 && (
+          <button
+            type="button"
+            onClick={handleShowListings}
+            className={
+              "mt-10 text-green-700 w-full p-3 rounded-lg font-semibold tracking-widest uppercase text-sm sm:text-md bg-green-100"
+            }
+          >
+            {showListingLoading ? "Fetching Listings..." : "Show Listings"}
+          </button>
+        ))}
+      {showListingError ? (
+        <p className="text-red-600 font-semibold">Error Showing Listing...</p>
+      ) : userListings && userListings.length > 0 ? (
+        <Listings userListings={userListings} />
+      ) : (
+        ""
       )}
     </div>
   );

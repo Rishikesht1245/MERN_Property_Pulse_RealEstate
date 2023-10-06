@@ -21,5 +21,9 @@ export const deleteUser = async (id) => {
 };
 
 export const createListing = async (formData) => {
-  return await axios.post("api/listing/create", formData);
+  return await axios.post("/api/listing/create", formData);
+};
+
+export const getAllListings = async (id) => {
+  return await axios.get(`/api/user/listings/${id}`);
 };

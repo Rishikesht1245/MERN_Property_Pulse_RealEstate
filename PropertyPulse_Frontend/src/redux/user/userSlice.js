@@ -45,6 +45,18 @@ const userSlice = createSlice({
       state.loading = false;
       state.sliceError = action.payload;
     },
+    showListingStart: (state) => {
+      state.loading = true;
+      state.sliceError = "";
+    },
+    showListingSuccess: (state) => {
+      state.loading = false;
+      state.sliceError = null;
+    },
+    showListingFailure: (state, action) => {
+      state.loading = false;
+      state.sliceError = action.payload;
+    },
   },
 });
 
