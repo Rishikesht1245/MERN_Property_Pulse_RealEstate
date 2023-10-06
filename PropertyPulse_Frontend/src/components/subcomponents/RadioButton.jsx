@@ -1,6 +1,6 @@
 import { Field, ErrorMessage } from "formik";
 
-function CheckBox({ name, placeholder, className }) {
+function RadioButton({ name, placeholder, className, type }) {
   return (
     <div className={`${className}`}>
       <label
@@ -12,7 +12,8 @@ function CheckBox({ name, placeholder, className }) {
           id={name}
           name={name}
           placeholder={placeholder}
-          type={"checkbox"}
+          type="radio"
+          value={placeholder.toLowerCase()}
         />
         {placeholder}
       </label>
@@ -26,4 +27,4 @@ function CheckBox({ name, placeholder, className }) {
   );
 }
 
-export default CheckBox;
+export default RadioButton;

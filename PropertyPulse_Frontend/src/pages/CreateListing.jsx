@@ -4,6 +4,7 @@ import PasswordInput from "../components/subcomponents/PasswordInput";
 import Button from "../components/subcomponents/Button";
 import TextArea from "../components/subcomponents/TextArea";
 import CheckBox from "../components/subcomponents/CheckBox";
+import RadioButton from "../components/subcomponents/RadioButton";
 import { useState } from "react";
 import {
   getDownloadURL,
@@ -12,12 +13,20 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import { listingSchema } from "../schema/listingSchema.js";
+import { createListing } from "../apiRoutes/userRoutes";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const CreateListing = () => {
   const [files, setFiles] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   const handleImageUpload = (e) => {
     //Multiple upload
@@ -42,9 +51,14 @@ const CreateListing = () => {
         .catch((error) => {
           setImageUploadError("Image upload failed ! (2 MB max per image");
         });
+    } else if (files.length === 0) {
+      setUploading(false);
+      setImageUploadError(
+        "You must choose at least one image before uploading"
+      );
     } else {
       setUploading(false);
-      setImageUploadError("You can only upload 6 images per listing!");
+      setImageUploadError("You can only upload 6 images!");
     }
   };
 
@@ -89,48 +103,57 @@ const CreateListing = () => {
           name: "",
           description: "",
           address: "",
-          sell: false,
-          rent: false,
+          type: "rent",
+          bedrooms: 1,
+          bathrooms: 1,
+          regularPrice: 50,
+          discountPrice: 0,
+          offer: false,
           parking: false,
           furnished: false,
-          offer: false,
-          bedrooms: 0,
-          bathrooms: 0,
-          regularPrice: 0,
-          discountedPrice: 0,
         }}
-        //   validationSchema={registerSchema}
-        //   onSubmit={(formData, { setSubmitting }) => {
-        //     setSubmitting(true);
-        //     console.log(formData);
-        //     registerUser(formData)
-        //       .then(({ data }) => {
-        //         toast.success("Registration Successful!", {
-        //           style: {
-        //             borderRadius: "10px",
-        //             background: "#333",
-        //             color: "#fff",
-        //           },
-        //         });
-        //         navigate("/sign-in");
-        //         return;
-        //       })
-        //       // inside error, response will be there inside it the actual error message sent from backend will see
-        //       .catch(
-        //         ({
-        //           response: {
-        //             data: { message },
-        //           },
-        //         }) => {
-        //           console.log(message);
-        //           setError(message);
-        //         }
-        //       )
+        validationSchema={listingSchema}
+        onSubmit={(formData, { setSubmitting }) => {
+          console.log(formData);
 
-        //       .finally(() => setSubmitting(false));
-        //   }}
+          setError(false);
+
+          // image must be there
+          if (imageUrls.length < 1)
+            return setError("You must upload at least one image!");
+          // discount price must be less than regular price
+          if (formData.regularPrice < formData.discountPrice)
+            return setError("Discount price must be lower than regular price!");
+          setSubmitting(true);
+          //copying user id and imageUrls to the formData to store in DB
+          createListing({ ...formData, userRef: currentUser._id, imageUrls })
+            .then(({ data }) => {
+              toast.success("Listing has been created!", {
+                style: {
+                  borderRadius: "10px",
+                  background: "#333",
+                  color: "#fff",
+                },
+              });
+              navigate(`/listing/${data._id}`);
+              return;
+            })
+            // inside error, response will be there inside it the actual error message sent from backend will see
+            .catch(
+              ({
+                response: {
+                  data: { message },
+                },
+              }) => {
+                console.log(message);
+                setError(message);
+              }
+            )
+
+            .finally(() => setSubmitting(false));
+        }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values }) => (
           <Form className="flex flex-col sm:flex-row justify-center w-[90%] sm:max-w-4xl mx-auto gap-10">
             <div className="flex flex-col gap-2 flex-1 w-full">
               <Input type="text" placeholder="Name" name="name" />
@@ -141,8 +164,8 @@ const CreateListing = () => {
               />
               <Input type="text" placeholder="Address" name="address" />
               <div className="flex gap-3 flex-wrap">
-                <CheckBox name="sale" placeholder={"Sell"} />
-                <CheckBox name="rent" placeholder={"Rent"} />
+                <RadioButton name="type" placeholder={"Sale"} />
+                <RadioButton name="type" placeholder={"Rent"} />
                 <CheckBox name="parking" placeholder={"Parking"} />
                 <CheckBox name="furnished" placeholder={"Furnished"} />
                 <CheckBox name="offer" placeholder={"Offer"} />
@@ -167,12 +190,14 @@ const CreateListing = () => {
                   name="regularPrice"
                   className={"w-[150px] "}
                 />
-                <Input
-                  type="number"
-                  placeholder={"Discounted Price $/Month"}
-                  name="discountedPrice"
-                  className={"w-[150px] "}
-                />
+                {values.offer && (
+                  <Input
+                    type="number"
+                    placeholder={"Discounted Price $/Month"}
+                    name="discountPrice"
+                    className={"w-[150px]"}
+                  />
+                )}
               </div>
             </div>
             <div className="flex flex-col flex-1 gap-4">
@@ -222,7 +247,10 @@ const CreateListing = () => {
                     </div>
                   ))}
               </div>
-              <Button>Create listing</Button>
+              <Button type={"submit"} disabled={isSubmitting || uploading}>
+                {isSubmitting ? "Creating..." : "Create listing"}
+              </Button>
+              {error && <p className="text-red-600 font-semibold">{error}</p>}
             </div>
           </Form>
         )}
