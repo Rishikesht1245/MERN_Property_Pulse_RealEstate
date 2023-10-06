@@ -1,3 +1,4 @@
+import Listing from "../../models/listing.model.js";
 import User from "../../models/user.model.js";
 import { errorHandler } from "../../utils/error.js";
 import bcrypt from "bcrypt";
@@ -48,5 +49,17 @@ export const deleteUser = async (req, res, next) => {
   } catch (error) {
     console.log("Error in deleting User :", error);
     next(error);
+  }
+};
+
+export const getUserListings = async (req, res, next) => {
+  try {
+    if (req.user.id !== req.params.id)
+      return next(errorHandler(401, "You can view your own listing"));
+
+    const listings = await Listing.find({ userRef: req.params.id });
+    return res.status(200).json(listings);
+  } catch (error) {
+    console.log("Error in Get listings of User : ", error);
   }
 };
