@@ -7,11 +7,21 @@ import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 
+import { PiShareFatFill } from "react-icons/pi";
+import {
+  FaBath,
+  FaBed,
+  FaChair,
+  FaMapMarkerAlt,
+  FaParking,
+} from "react-icons/fa";
+
 const SingleListing = () => {
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { listingId } = useParams();
 
   //fetching listing data for the single listing page
@@ -48,21 +58,91 @@ const SingleListing = () => {
       )}
 
       {listing && !loading && !error && (
-        <>
+        <div>
           <Swiper navigation>
-            {listing.imageUrls.map((imageUrl) => {
-              return (
-                <SwiperSlide key={imageUrl}>
-                  <img
-                    src={imageUrl}
-                    alt="images"
-                    className="h-[450px] w-[100%] object-cover p-3"
-                  />
-                </SwiperSlide>
-              );
-            })}
+            {listing.imageUrls.map((url) => (
+              <SwiperSlide key={url}>
+                <div
+                  className="h-[400px]"
+                  style={{
+                    background: `url(${url}) center no-repeat`,
+                    backgroundSize: "cover",
+                  }}
+                ></div>
+              </SwiperSlide>
+            ))}
           </Swiper>
-        </>
+          {/* share button */}
+          <div className="fixed top-[15%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
+            <PiShareFatFill
+              className="text-xl text-gray-600"
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                setCopied(true);
+                setTimeout(() => {
+                  setCopied(false);
+                }, 2000);
+              }}
+            />
+          </div>
+          {/* copied message */}
+          {copied && (
+            <p className="fixed font-semibold top-[25%] right-[5%] z-10 rounded-md bg-slate-100 p-2 px-5">
+              Link copied!
+            </p>
+          )}
+          {/* details */}
+          <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4 tracking-wider">
+            <p className="text-xl font-semibold">
+              {listing.name} - ${" "}
+              {listing.offer
+                ? listing?.discountPrice.toLocaleString("en-US")
+                : listing?.regularPrice.toLocaleString("en-US")}
+              {listing.type === "rent" && " / month"}
+            </p>
+            <p className="flex items-center mt-2 gap-2 text-slate-600 font-semibold text-sm">
+              <FaMapMarkerAlt className="text-green-700" />
+              {listing.address}
+            </p>
+            <div className="flex gap-4">
+              <p className="bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
+                {listing.type === "rent" ? "For Rent" : "For Sale"}
+              </p>
+              {listing.offer && (
+                <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
+                  {" "}
+                  ${+listing.regularPrice - listing.discountPrice} - Discount
+                </p>
+              )}
+            </div>
+            <p className="text-slate-700">
+              <span className="text-black font-semibold">Description - </span>
+              {listing.description}
+            </p>
+            <ul className=" text-green-900 text-md font-semibold flex items-center gap-5 sm:gap-10 flex-wrap">
+              <li className="flex gap-2 items-center whitespace-nowrap">
+                <FaBed className="text-2xl" />
+                {listing.bedrooms > 1
+                  ? `${listing.bedrooms} beds`
+                  : `${listing.bedrooms} bed`}
+              </li>
+              <li className="flex gap-2 items-center whitespace-nowrap">
+                <FaBath className="text-xl" />
+                {listing.bedrooms > 1
+                  ? `${listing.bathrooms} baths`
+                  : `${listing.bathrooms} bath`}
+              </li>
+              <li className="flex gap-2 items-center whitespace-nowrap">
+                <FaParking className="text-xl" />
+                {listing.parking ? `Parking` : `No Parking`}
+              </li>
+              <li className="flex gap-2 items-center whitespace-nowrap">
+                <FaChair className="text-xl" />
+                {listing.furnished ? `Furnished` : `No Furnished`}
+              </li>
+            </ul>
+          </div>
+        </div>
       )}
     </main>
   );
