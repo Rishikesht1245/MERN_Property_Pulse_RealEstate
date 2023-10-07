@@ -34,7 +34,7 @@ export default function Header() {
     if (searchTermFromUrl) {
       setSearchTerm(searchTermFromUrl);
     }
-  }, [location.search]);
+  }, [window.location.search]);
 
   return (
     <header className="bg-slate-200 shadow-md sticky top-0 z-20">

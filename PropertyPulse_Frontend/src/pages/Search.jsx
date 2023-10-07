@@ -21,7 +21,7 @@ const Search = () => {
 
   const initialValues = {
     searchTerm: searchTermFromUrl || "",
-    all: "true",
+    all: true,
     offer: false,
     rent: false,
     sale: false,
@@ -61,12 +61,13 @@ const Search = () => {
   }, [window.location.search]);
 
   const handleSubmit = (formData) => {
+    console.log(formData);
     // getting existing information already in the url
     const urlParams = new URLSearchParams();
 
     //setting the type based on the user input
     if (
-      formData.all == "true" ||
+      formData.all === true ||
       (formData.rent === true && formData.sale === true)
     ) {
       formData.type = "all";
@@ -79,7 +80,7 @@ const Search = () => {
     const sort = formData.sort.split("_")[0] || "createdAt";
     const order = formData.sort.split("_")[1] || "desc";
     // for keeping already existing search from the main search bar
-    urlParams.set("searchTerm", formData.searchTerm || searchTermFromUrl);
+    urlParams.set("searchTerm", formData.searchTerm);
     urlParams.set("type", formData.type);
     urlParams.set("parking", formData.parking);
     urlParams.set("furnished", formData.furnished);
@@ -158,7 +159,6 @@ const Search = () => {
                   className={"flex items-center"}
                   label={"Sort"}
                   options={sortOptions}
-                  defaultValue={"createdAt_desc"}
                   name="sort"
                 />
               </div>

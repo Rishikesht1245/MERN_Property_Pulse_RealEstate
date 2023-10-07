@@ -1,6 +1,6 @@
 import { ErrorMessage, Field } from "formik";
 
-const SelectInput = ({ name, options, className, label, defaultValue }) => {
+const SelectInput = ({ name, options, className, label }) => {
   return (
     <div className={className}>
       <label
@@ -17,12 +17,6 @@ const SelectInput = ({ name, options, className, label, defaultValue }) => {
           className={`${className} text-slate-600 font-semibold rounded-md p-2 mt-2 ml-2 shadow focus:outline-none w-full text-sm`}
         >
           [
-          {
-            <option key="default" value={defaultValue}>
-              -- Select {label} --
-            </option>
-          }
-          , ...
           {options?.map((option) => (
             <option key={option.value} value={option.value}>
               {option.text}
