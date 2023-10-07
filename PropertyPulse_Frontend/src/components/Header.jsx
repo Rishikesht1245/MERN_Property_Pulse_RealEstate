@@ -1,10 +1,41 @@
 import { FaSearch } from "react-icons/fa";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    /* URL SearchParams method is used for getting params present in the url (here we are creating a searchParams with the 
+      existing params using window.location.search) */
+    const urlParams = new URLSearchParams(window.location.search);
+    // // To retrieve all parameter names and values
+    // for (const [param, value] of urlParams) {
+    //   console.log(`${param}: ${value}`);
+    // }
+
+    //only setting the searchTerm query to the entered value, by keeping all other queries with in the url.
+    urlParams.set("searchTerm", searchTerm);
+
+    const searchQuery = urlParams.toString();
+    // /search will be the page for representing all the routes
+    navigate(`/search?${searchQuery}`);
+  };
+
+  // this function will change the input in the search box when user modifies the searchTerm Query from the URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
   return (
     <header className="bg-slate-200 shadow-md sticky top-0 z-20">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -14,13 +45,18 @@ export default function Header() {
             <span className="text-slate-700">Pulse</span>
           </h1>
         </NavLink>
-        <form className="bg-slate-100 px-3 py-2 rounded-lg flex items-center">
+        <form
+          className="bg-slate-100 px-3 py-2 rounded-lg flex items-center"
+          onSubmit={handleSubmit}
+        >
           <input
             type="text"
             placeholder="Search..."
             className="bg-transparent focus:outline-none w-24 sm:w-64 text-slate-600"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button>
+          <button type="submit">
             <FaSearch className="text-slate-400 cursor-pointer hover:text-slate-600" />
           </button>
         </form>
