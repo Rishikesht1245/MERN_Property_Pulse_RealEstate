@@ -4,9 +4,9 @@ import {
   deleteListing,
   updateListing,
   getListing,
+  getListings,
 } from "../../controllers/user/listing.controller.js";
 import { verifyToken } from "../../utils/verifyUser.js";
-import { resourceLimits } from "worker_threads";
 
 const router = express.Router();
 
@@ -20,5 +20,8 @@ router.get("/view/:id", getListing);
 
 // edit listing
 router.post("/update/:id", verifyToken, updateListing);
+
+// search sort and filtering in one api route using query
+router.get("/get", getListings);
 
 export default router;
