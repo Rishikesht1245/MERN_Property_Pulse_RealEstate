@@ -68,6 +68,7 @@ export const getListing = async (req, res, next) => {
 
 // search sort and filter single function
 export const getListings = async (req, res, next) => {
+  console.log("reached");
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
@@ -75,17 +76,17 @@ export const getListings = async (req, res, next) => {
     //if user didn't selected on offer check box we need to show properties which are having offer and not
     // undefined is for search from the main page. no offer query is added in url
     let offer = req.query.offer;
-    if (offer === undefined || false) {
+    if (offer === undefined || offer === false) {
       offer = { $in: [false, true] };
     }
 
     let furnished = req.query.furnished;
-    if (furnished === undefined || false) {
+    if (furnished === undefined || furnished === false) {
       furnished = { $in: [false, true] };
     }
 
     let parking = req.query.parking;
-    if (parking === undefined || false) {
+    if (parking === undefined || parking === false) {
       parking = { $in: [false, true] };
     }
 
@@ -101,19 +102,18 @@ export const getListings = async (req, res, next) => {
     const order = req.query.order || "desc";
 
     const listing = await Listing.find({
-      //regex for used for searching, i case insensitive
+      // //regex for used for searching, i case insensitive
       name: { $regex: searchTerm, $options: "i" },
-      // below variable will be replaced with $in or the query
+      // // below variable will be replaced with $in or the query
       offer,
       furnished,
       parking,
       type,
-      // [ ] is used to convert sort string to key
+      // // [ ] is used to convert sort string to key
     })
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex);
-
     return res.status(200).json(listing);
   } catch (error) {
     console.log("Error in Get Listing");

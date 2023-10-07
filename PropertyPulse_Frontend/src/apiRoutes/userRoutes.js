@@ -39,3 +39,7 @@ export const getListing = async (listingId) => {
 export const updateListing = async (formData, listingId) => {
   return await axios.post(`/api/listing/update/${listingId}`, formData);
 };
+
+export const getSearchedListings = async (searchQuery) => {
+  return await axios.get(`/api/listing/get?${searchQuery}`);
+};

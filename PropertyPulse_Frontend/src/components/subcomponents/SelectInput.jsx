@@ -18,8 +18,8 @@ const SelectInput = ({ name, options, className, label, defaultValue }) => {
         >
           [
           {
-            <option key="default" value={label}>
-              {defaultValue}
+            <option key="default" value={defaultValue}>
+              -- Select {label} --
             </option>
           }
           , ...
