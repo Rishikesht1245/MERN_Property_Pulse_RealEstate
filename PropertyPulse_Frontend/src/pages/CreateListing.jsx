@@ -95,7 +95,7 @@ const CreateListing = () => {
 
   return (
     <main className="p-3 max-w-4xl mx-auto">
-      <h1 className="uppercase tracking-widest text-center text-3xl font-semibold my-10">
+      <h1 className="uppercase tracking-widest text-center text-xl sm:text-3xl font-semibold my-10">
         Create Listing
       </h1>
       <Formik

@@ -1,6 +1,6 @@
 import { Field, ErrorMessage } from "formik";
 
-function Input({ name, placeholder, type, className }) {
+function Input({ name, placeholder, type, className, required }) {
   return (
     <div className={`flex flex-col ${className}`}>
       {placeholder && (
@@ -9,7 +9,11 @@ function Input({ name, placeholder, type, className }) {
           className="text-sm font-bold mb-1 ml-1 tracking-widest text-slate-700"
         >
           {`${placeholder}`}
-          <span className="text-red-800">*</span>
+          {required === undefined ? (
+            <span className="text-red-800">*</span>
+          ) : (
+            <span className="ml-[2px]">:</span>
+          )}
         </label>
       )}
 
