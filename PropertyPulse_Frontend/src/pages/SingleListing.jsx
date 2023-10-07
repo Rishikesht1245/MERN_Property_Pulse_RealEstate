@@ -12,9 +12,12 @@ import {
   FaBath,
   FaBed,
   FaChair,
+  FaHeart,
   FaMapMarkerAlt,
   FaParking,
 } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import Contact from "../components/Contact";
 
 const SingleListing = () => {
   SwiperCore.use([Navigation]);
@@ -22,7 +25,10 @@ const SingleListing = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contact, setContact] = useState(false);
   const { listingId } = useParams();
+
+  const { currentUser } = useSelector((state) => state.user);
 
   //fetching listing data for the single listing page
   useEffect(() => {
@@ -45,12 +51,15 @@ const SingleListing = () => {
 
     fetchListing();
   }, [listingId]);
+
   return (
     <main>
       {loading && <p className="text-center m-auto text-2xl">Loading...</p>}
       {error && (
-        <div className="self-center my-7">
-          <p className="text-2xl">Something went wrong!</p>
+        <div className="text-center flex gap-10 flex-col justify-center items-center h-[80vh]">
+          <p className="text-2xl text-slate-700 text-bold">
+            Something went wrong!
+          </p>
           <Link to={"/"}>
             <Button type={"button"}>Back to Home</Button>
           </Link>
@@ -73,7 +82,7 @@ const SingleListing = () => {
             ))}
           </Swiper>
           {/* share button */}
-          <div className="fixed top-[15%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
+          <div className="absolute top-[15%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
             <PiShareFatFill
               className="text-xl text-gray-600"
               onClick={() => {
@@ -84,6 +93,10 @@ const SingleListing = () => {
                 }, 2000);
               }}
             />
+          </div>
+          {/* wishlist implementation pending */}
+          <div className="absolute top-[25%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
+            <FaHeart className="text-lg text-gray-600" />
           </div>
           {/* copied message */}
           {copied && (
@@ -115,11 +128,13 @@ const SingleListing = () => {
                 </p>
               )}
             </div>
-            <p className="text-slate-700">
-              <span className="text-black font-semibold">Description - </span>
+            <p className="text-slate-700 text-md">
+              <span className="text-black font-semibold tracking-normal">
+                Description -{" "}
+              </span>
               {listing.description}
             </p>
-            <ul className=" text-green-900 text-md font-semibold flex items-center gap-5 sm:gap-10 flex-wrap">
+            <ul className=" text-green-900 text-md font-semibold flex items-center gap-5 sm:gap-8 flex-wrap">
               <li className="flex gap-2 items-center whitespace-nowrap">
                 <FaBed className="text-2xl" />
                 {listing.bedrooms > 1
@@ -141,6 +156,14 @@ const SingleListing = () => {
                 {listing.furnished ? `Furnished` : `No Furnished`}
               </li>
             </ul>
+            {currentUser &&
+              listing.userRef._id !== currentUser._id &&
+              !contact && (
+                <Button className="my-5 px-5" onClick={() => setContact(true)}>
+                  Contact Landlord
+                </Button>
+              )}
+            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}

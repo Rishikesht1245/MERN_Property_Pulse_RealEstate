@@ -6,7 +6,7 @@ export default function Header() {
   const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
   return (
-    <header className="bg-slate-200 shadow-md sticky top-0 z-10">
+    <header className="bg-slate-200 shadow-md sticky top-0 z-20">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <NavLink to="/">
           <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">

@@ -53,7 +53,9 @@ export const updateListing = async (req, res, next) => {
 
 export const getListing = async (req, res, next) => {
   try {
-    const listing = await Listing.findById(req.params.id);
+    const listing = await Listing.findById(req.params.id).populate("userRef");
+    // making the password empty as don't want to see it in the client side.
+    listing.userRef.password = "";
 
     if (!listing) return next(errorHandler(404, "Listing not found!"));
 
