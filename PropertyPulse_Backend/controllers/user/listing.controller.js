@@ -68,7 +68,6 @@ export const getListing = async (req, res, next) => {
 
 // search sort and filter single function
 export const getListings = async (req, res, next) => {
-  console.log("reached");
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
@@ -76,17 +75,17 @@ export const getListings = async (req, res, next) => {
     //if user didn't selected on offer check box we need to show properties which are having offer and not
     // undefined is for search from the main page. no offer query is added in url
     let offer = req.query.offer;
-    if (offer === undefined || offer === false) {
+    if (offer === undefined || offer == "false") {
       offer = { $in: [false, true] };
     }
-
+    // inside req.query boolean will be in string format
     let furnished = req.query.furnished;
-    if (furnished === undefined || furnished === false) {
+    if (furnished === undefined || furnished == "false") {
       furnished = { $in: [false, true] };
     }
 
     let parking = req.query.parking;
-    if (parking === undefined || parking === false) {
+    if (parking === undefined || parking == "false") {
       parking = { $in: [false, true] };
     }
 
@@ -99,12 +98,13 @@ export const getListings = async (req, res, next) => {
     const searchTerm = req.query.searchTerm || "";
     //sorting default order is created At and descending which means latest first
     const sort = req.query.sort || "createdAt";
-    const order = req.query.order || "desc";
+    const order = req.query.order === "asc" ? 1 : -1 || 1;
+    console.log(order);
 
     const listing = await Listing.find({
       // //regex for used for searching, i case insensitive
       name: { $regex: searchTerm, $options: "i" },
-      // // below variable will be replaced with $in or the query
+      // // // below variable will be replaced with $in or the query
       offer,
       furnished,
       parking,

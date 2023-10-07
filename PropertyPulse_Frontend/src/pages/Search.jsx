@@ -4,17 +4,21 @@ import CheckBox from "../components/subcomponents/CheckBox";
 import { useEffect, useMemo, useRef, useState } from "react";
 import SelectInput from "../components/subcomponents/SelectInput";
 import Button from "../components/subcomponents/Button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getSearchedListings } from "../apiRoutes/userRoutes";
+import Loading from "../components/subcomponents/Loading";
+import ListingCard from "../components/ListingCard";
 
 const Search = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
+  const [error, setError] = useState(false);
   // for keeping already existing search from the main search bar
   const urlParams = new URLSearchParams(location.search);
   const searchTermFromUrl = urlParams.get("searchTerm");
   let urlRef = useRef(urlParams.toString());
+
   const initialValues = {
     searchTerm: searchTermFromUrl || "",
     all: "true",
@@ -38,12 +42,19 @@ const Search = () => {
     []
   );
 
-  // fetching listings based on query
+  // fetching listings based on query and dependency array window.location.search (location.search is now working)
   useEffect(() => {
     const fetchListings = async () => {
-      setLoading(true);
-      const searchQuery = urlRef.current;
-      const { data } = await getSearchedListings(urlRef.current);
+      try {
+        setLoading(true);
+        setError(false);
+        const { data } = await getSearchedListings(urlRef.current);
+        setListings(data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setError(true);
+      }
     };
 
     fetchListings();
@@ -161,6 +172,36 @@ const Search = () => {
         <h1 className="uppercase tracking-widest text-center text-xl sm:text-3xl font-semibold my-2 border-b-2 p-3">
           Listing Results:
         </h1>
+        <div className="flex items-center justify-center">
+          {loading && <Loading />}
+          {error && (
+            <div className="text-center flex gap-10 flex-col justify-center items-center h-[80vh]">
+              <p className="text-2xl text-slate-700 text-bold">
+                Something went wrong!
+              </p>
+              <Link to={"/"}>
+                <Button type={"button"}>Back to Home</Button>
+              </Link>
+            </div>
+          )}
+          {!loading && listings.length === 0 && (
+            <div className="text-center flex gap-10 flex-col justify-center items-center h-[80vh]">
+              <p className="text-2xl text-slate-700 text-bold">
+                No listing found!
+              </p>
+              <Link to={"/"}>
+                <Button type={"button"}>Back to Home</Button>
+              </Link>
+            </div>
+          )}
+          {!loading && listings?.length > 0 && (
+            <div className="flex gap-5 justify-between flex-wrap">
+              {listings.map((listing) => (
+                <ListingCard key={listing._id} listing={listing} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
