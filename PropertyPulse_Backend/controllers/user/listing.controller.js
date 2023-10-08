@@ -69,6 +69,8 @@ export const getListing = async (req, res, next) => {
 // search sort and filter single function
 export const getListings = async (req, res, next) => {
   try {
+    console.log("reached");
+    console.log(req.query);
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
 
@@ -99,7 +101,6 @@ export const getListings = async (req, res, next) => {
     //sorting default order is created At and descending which means latest first
     const sort = req.query.sort || "createdAt";
     const order = req.query.order === "asc" ? 1 : -1 || 1;
-    console.log(order);
 
     const listing = await Listing.find({
       // //regex for used for searching, i case insensitive
@@ -114,6 +115,7 @@ export const getListings = async (req, res, next) => {
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex);
+    console.log("end");
     return res.status(200).json(listing);
   } catch (error) {
     console.log("Error in Get Listing");

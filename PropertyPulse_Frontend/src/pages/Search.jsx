@@ -14,11 +14,11 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
   const [error, setError] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   // for keeping already existing search from the main search bar
   const urlParams = new URLSearchParams(location.search);
   const searchTermFromUrl = urlParams.get("searchTerm");
   let urlRef = useRef(urlParams.toString());
-
   const initialValues = {
     searchTerm: searchTermFromUrl || "",
     all: true,
@@ -48,12 +48,17 @@ const Search = () => {
       try {
         setLoading(true);
         setError(false);
+        setShowMore(false);
         const { data } = await getSearchedListings(urlRef.current);
         setListings(data);
         setLoading(false);
+        if (data.length > 8) {
+          setShowMore(true);
+        }
       } catch (error) {
         console.log(error);
         setError(true);
+        setLoading(false);
       }
     };
 
@@ -96,10 +101,34 @@ const Search = () => {
     urlRef.current = searchQuery;
     navigate(`/search?${searchQuery}`);
   };
+
+  // show more button : changes the url and which will trigger the api call inside the useEffect
+  const handleShowMore = async () => {
+    const startIndex = listings.length;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+    try {
+      setLoading(true);
+      setError(false);
+      setShowMore(false);
+      const { data } = await getSearchedListings(searchQuery);
+      setListings([...listings, ...data]);
+      setLoading(false);
+      if (data.length > 8) {
+        setShowMore(true);
+      }
+    } catch (error) {
+      console.log(error);
+      setError(true);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row">
       {/* left side section */}
-      <div className="p-7 border-b-2 sm:border-r-2 md:min-h-screen md:flex-0.5  md:max-w-sm">
+      <div className="p-7 border-b-2 sm:border-r-2 md:min-h-screen md:flex-0.5  sm:max-w-xs ">
         <Formik
           initialValues={initialValues}
           onSubmit={(formData, { setSubmitting }) => {
@@ -168,11 +197,11 @@ const Search = () => {
         </Formik>
       </div>
       {/* right side section */}
-      <div className="p-7 md:flex-1">
+      <div className="p-2 md:flex-1">
         <h1 className="uppercase tracking-widest text-center text-xl sm:text-3xl font-semibold my-2 border-b-2 p-3">
           Listing Results:
         </h1>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center mt-10">
           {loading && <Loading />}
           {error && (
             <div className="text-center flex gap-10 flex-col justify-center items-center h-[80vh]">
@@ -184,7 +213,7 @@ const Search = () => {
               </Link>
             </div>
           )}
-          {!loading && listings.length === 0 && (
+          {!loading && listings && listings.length === 0 && (
             <div className="text-center flex gap-10 flex-col justify-center items-center h-[80vh]">
               <p className="text-2xl text-slate-700 text-bold">
                 No listing found!
@@ -195,13 +224,23 @@ const Search = () => {
             </div>
           )}
           {!loading && listings?.length > 0 && (
-            <div className="flex gap-5 justify-between flex-wrap">
+            <div className="flex gap-8 flex-wrap p-2">
               {listings.map((listing) => (
                 <ListingCard key={listing._id} listing={listing} />
               ))}
             </div>
           )}
         </div>
+        {showMore && (
+          <div className="w-full flex justify-center">
+            <Button
+              className={"mt-10 max-w-[30%] w-full self-center"}
+              onClick={handleShowMore}
+            >
+              Show more
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

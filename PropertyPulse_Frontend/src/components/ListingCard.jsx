@@ -3,7 +3,7 @@ import { MdLocationOn } from "react-icons/md";
 
 const ListingCard = ({ listing }) => {
   return (
-    <div className="mx-auto bg-white shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden rounded-lg w-full sm:w-[330px]">
+    <div className="mx-auto bg-white shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden rounded-lg w-full sm:w-[270px]">
       <Link className="flex flex-col gap-4" to={`/listing/${listing._id}`}>
         <img
           src={listing.imageUrls[0]}

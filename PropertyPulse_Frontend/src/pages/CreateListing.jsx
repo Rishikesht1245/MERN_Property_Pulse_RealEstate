@@ -49,6 +49,7 @@ const CreateListing = () => {
           setUploading(false);
         })
         .catch((error) => {
+          setUploading(false);
           setImageUploadError("Image upload failed ! (2 MB max per image");
         });
     } else if (files.length === 0) {
