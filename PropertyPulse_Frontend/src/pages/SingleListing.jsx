@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Contact from "../components/Contact";
+import Loading from "../components/subcomponents/Loading";
 
 const SingleListing = () => {
   SwiperCore.use([Navigation]);
@@ -54,7 +55,7 @@ const SingleListing = () => {
 
   return (
     <main>
-      {loading && <p className="text-center m-auto text-2xl">Loading...</p>}
+      {loading && <Loading />}
       {error && (
         <div className="text-center flex gap-10 flex-col justify-center items-center h-[80vh]">
           <p className="text-2xl text-slate-700 text-bold">

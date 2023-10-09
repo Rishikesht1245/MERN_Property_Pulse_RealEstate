@@ -147,6 +147,16 @@ const Profile = () => {
         setShowListingLoading(false);
         return;
       }
+      if (data.length === 0) {
+        setShowListingLoading(false);
+        return toast.error("No Listings Found!", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
       setUserListings(data);
       setShowListingLoading(false);
     } catch (error) {
@@ -273,7 +283,7 @@ const Profile = () => {
         (!userListings.length > 0 && (
           <button
             type="button"
-            onClick={handleShowListings}
+            onClick={() => handleShowListings()}
             className={
               "mt-10 text-green-700 w-full p-3 rounded-lg font-semibold tracking-widest uppercase text-sm sm:text-md bg-green-100"
             }

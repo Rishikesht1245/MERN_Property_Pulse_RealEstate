@@ -22,7 +22,7 @@ const SignIn = () => {
     <div
       className="w-[100%] h-full py-10 bg-fixed"
       style={{
-        backgroundImage: `url("https://res.cloudinary.com/djcn6luvw/image/upload/v1696355992/bgimg_l4yxdv.jpg")`,
+        backgroundImage: `url("https://res.cloudinary.com/djcn6luvw/image/upload/v1696846031/pexels-tom-fisk-2292073_jgsncg.jpg")`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         minHeight: "100vh",

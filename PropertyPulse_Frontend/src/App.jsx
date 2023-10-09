@@ -11,34 +11,34 @@ import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
 import SingleListing from "./pages/SingleListing";
 import Search from "./pages/Search";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/about" element={<About />} />
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/about" element={<About />} />
 
-          {/* Private Routes */}
-          <Route element={<PrivateRoute />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/create-listing" element={<CreateListing />} />
-            <Route
-              path="/update-listing/:listingId"
-              element={<UpdateListing />}
-            />
-            <Route path="/listing/:listingId" element={<SingleListing />} />
-          </Route>
+        {/* Private Routes */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/create-listing" element={<CreateListing />} />
+          <Route
+            path="/update-listing/:listingId"
+            element={<UpdateListing />}
+          />
+          <Route path="/listing/:listingId" element={<SingleListing />} />
+        </Route>
 
-          {/* search */}
-          <Route path="/search" element={<Search />} />
-        </Routes>
-      </Router>
+        {/* search */}
+        <Route path="/search" element={<Search />} />
+        <Route path="/*" element={<NotFound />} />
+      </Routes>
     </>
   );
 }

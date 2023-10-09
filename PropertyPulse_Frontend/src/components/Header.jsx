@@ -4,15 +4,15 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 export default function Header() {
-  const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const location = useLocation();
   const handleSubmit = (e) => {
     e.preventDefault();
     /* URL SearchParams method is used for getting params present in the url (here we are creating a searchParams with the 
-      existing params using window.location.search) */
+        existing params using window.location.search) */
     const urlParams = new URLSearchParams(window.location.search);
     // // To retrieve all parameter names and values
     // for (const [param, value] of urlParams) {
@@ -25,16 +25,16 @@ export default function Header() {
     const searchQuery = urlParams.toString();
     // /search will be the page for representing all the routes
     navigate(`/search?${searchQuery}`);
-  };
 
-  // this function will change the input in the search box when user modifies the searchTerm Query from the URL
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const searchTermFromUrl = urlParams.get("searchTerm");
-    if (searchTermFromUrl) {
-      setSearchTerm(searchTermFromUrl);
-    }
-  }, [window.location.search]);
+    // this function will change the input in the search box when user modifies the searchTerm Query from the URL
+    useEffect(() => {
+      const urlParams = new URLSearchParams(location.search);
+      const searchTermFromUrl = urlParams.get("searchTerm");
+      if (searchTermFromUrl) {
+        setSearchTerm(searchTermFromUrl);
+      }
+    }, [window.location.search]);
+  };
 
   return (
     <header className="bg-slate-200 shadow-md sticky top-0 z-20">
