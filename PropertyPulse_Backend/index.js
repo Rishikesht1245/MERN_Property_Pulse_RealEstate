@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import userRouter from "./routes/user/user.routes.js";
 import authRouter from "./routes/user/auth.routes.js";
 import listingRouter from "./routes/user/listing.routes.js";
+import messengerRoutes from "./routes/user/messenger.routes.js";
 import cookieParser from "cookie-parser";
 import { Server as SocketIOServer } from "socket.io";
 import dotenv from "dotenv";
@@ -37,6 +38,8 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 // listing routes
 app.use("/api/listing", listingRouter);
+// messenger routes
+app.use("/api/conversation", messengerRoutes);
 
 // middleware for error handling
 app.use((err, req, res, next) => {

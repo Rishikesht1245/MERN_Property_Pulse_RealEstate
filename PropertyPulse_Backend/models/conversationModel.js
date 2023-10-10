@@ -11,3 +11,6 @@ const ConversationSchema = new mongoose.Schema({
     ref: "Listing",
   },
 });
+
+const Conversations = mongoose.model("Conversation", ConversationSchema);
+export default Conversations;
