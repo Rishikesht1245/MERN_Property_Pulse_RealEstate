@@ -4,6 +4,7 @@ import userRouter from "./routes/user/user.routes.js";
 import authRouter from "./routes/user/auth.routes.js";
 import listingRouter from "./routes/user/listing.routes.js";
 import cookieParser from "cookie-parser";
+import { Server as SocketIOServer } from "socket.io";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -26,7 +27,7 @@ mongoose
   });
 
 // listening to port
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log("Server is running on Port 3000");
 });
 
@@ -50,4 +51,16 @@ app.use((err, req, res, next) => {
     statusCode,
     message,
   });
+});
+
+//socket configuration
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("A user connected");
 });

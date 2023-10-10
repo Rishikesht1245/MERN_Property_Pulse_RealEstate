@@ -13,6 +13,7 @@ import SingleListing from "./pages/SingleListing";
 import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 import { Footer } from "./components/Footer";
+import Messenger from "./pages/Messenger";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
             element={<UpdateListing />}
           />
           <Route path="/listing/:listingId" element={<SingleListing />} />
+          <Route path="/chats" element={<Messenger />} />
         </Route>
 
         {/* search */}

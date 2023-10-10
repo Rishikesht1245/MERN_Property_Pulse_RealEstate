@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { getListing } from "../apiRoutes/userRoutes";
-import { Link, useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import Button from "../components/subcomponents/Button";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 
-import { PiShareFatFill } from "react-icons/pi";
+import { PiChatsBold, PiShareFatFill } from "react-icons/pi";
 import {
   FaBath,
   FaBed,
@@ -85,7 +85,8 @@ const SingleListing = () => {
           {/* share button */}
           <div className="absolute top-[15%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
             <PiShareFatFill
-              className="text-xl text-gray-600"
+              title="Copy link"
+              className="text-xl text-gray-600 hover:text-blue-500"
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
                 setCopied(true);
@@ -97,7 +98,25 @@ const SingleListing = () => {
           </div>
           {/* wishlist implementation pending */}
           <div className="absolute top-[25%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
-            <FaHeart className="text-lg text-gray-600" />
+            <FaHeart
+              className="text-lg text-gray-600 hover:text-red-500"
+              title="Add to wishlist"
+            />
+          </div>
+          <div className="absolute top-[35%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
+            <NavLink
+              to="/chats"
+              className={(navClass) =>
+                navClass.isActive
+                  ? "text-slate-700 text-[16px]  font-semibold  hover:underline"
+                  : "text-slate-500 text-[16px] font-semibold hover:underline"
+              }
+            >
+              <PiChatsBold
+                title="Chat with owner"
+                className="text-xl hover:text-blue-500 font-bold"
+              />
+            </NavLink>
           </div>
           {/* copied message */}
           {copied && (

@@ -2,6 +2,7 @@ import { FaSearch } from "react-icons/fa";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { PiChatsBold } from "react-icons/pi";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -83,6 +84,18 @@ export default function Header() {
               }
             >
               About
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/chats"
+              className={(navClass) =>
+                navClass.isActive
+                  ? "text-slate-700 text-[16px]  font-semibold  hover:underline"
+                  : "text-slate-500 text-[16px] font-semibold hover:underline"
+              }
+            >
+              <PiChatsBold className="text-2xl hover:text-blue-500" />
             </NavLink>
           </li>
           <li>

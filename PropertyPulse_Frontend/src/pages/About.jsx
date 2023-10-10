@@ -1,10 +1,10 @@
 const About = () => {
   return (
-    <div className="pt-20 px-10 max-w-6xl max-auto">
+    <div className="p-20 max-w-7xl max-auto">
       <h1 className="text-3xl font-bold mb-6 text-slate-800">
         About PropertyPulse
       </h1>
-      <p className="mb-6 text-slate-700 text-sm sm:text-lg font-semibold">
+      <p className="mb-6 text-slate-700 text-sm font-semibold">
         Property Pulse is your ultimate real estate companion, designed to
         simplify the process of buying, selling, or investing in properties.
         Whether you're a first-time homebuyer, an experienced real estate
@@ -14,7 +14,7 @@ const About = () => {
       <h1 className="text-xl font-bold mb-4 text-slate-800">
         Why choose PropertyPulse ?
       </h1>
-      <p className="mb-4 text-slate-700 text-sm sm:text-lg font-semibold">
+      <p className="mb-4 text-slate-700 text-sm font-semibold">
         Property Pulse is not just a real estate platform; it's a partner in
         your real estate journey. With our user-centric approach, vast property
         database, and expert support, we empower you to make confident decisions
@@ -23,7 +23,7 @@ const About = () => {
         today.
       </p>
       <h1 className="text-xl font-bold mb-4 text-slate-800">Features</h1>
-      <ul className="flex flex-col gap-5  text-slate-700 text-sm sm:text-lg font-semibold">
+      <ul className="flex flex-col gap-5  text-slate-700 text-sm  font-semibold">
         <li>
           <span className="font-bold">Property Search:</span> Explore a vast
           database of properties, from cozy apartments to spacious family homes
