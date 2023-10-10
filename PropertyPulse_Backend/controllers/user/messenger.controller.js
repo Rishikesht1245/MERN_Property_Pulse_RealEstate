@@ -1,3 +1,4 @@
+import Messages from "../../models/MessageModel.js";
 import Conversations from "../../models/conversationModel.js";
 
 export const createConversation = async (req, res, next) => {
@@ -24,6 +25,33 @@ export const getConversations = async (req, res, next) => {
     res.status(200).json(conversations);
   } catch (error) {
     console.log("error in get all conversations : ", error);
+    next(error);
+  }
+};
+
+// add new message
+export const addMessage = async (req, res, next) => {
+  try {
+    const newMessage = new Messages(req.body);
+    const savedMessage = await newMessage.save();
+    res.status(201).json(savedMessage);
+  } catch (error) {
+    console.log("Error in add message : ", error);
+    next(error);
+  }
+};
+
+// get all messages in a conversation
+export const getMessages = async (req, res, next) => {
+  console.log("reached");
+  try {
+    const messages = await Messages.find({
+      conversationId: req.params.conversationId,
+    });
+
+    res.status(200).json(messages);
+  } catch (error) {
+    console.log("Error in Get messages : ", error);
     next(error);
   }
 };
