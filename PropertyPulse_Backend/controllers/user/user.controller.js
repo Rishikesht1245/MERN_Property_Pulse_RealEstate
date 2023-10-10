@@ -76,5 +76,17 @@ export const getUserListings = async (req, res, next) => {
     return res.status(200).json(listings);
   } catch (error) {
     console.log("Error in Get listings of User : ", error);
+    next(error);
+  }
+};
+
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return next(errorHandler(404, "User not found"));
+    res.status(200).json(user);
+  } catch (error) {
+    console.log("error in get User :", error);
+    next(error);
   }
 };

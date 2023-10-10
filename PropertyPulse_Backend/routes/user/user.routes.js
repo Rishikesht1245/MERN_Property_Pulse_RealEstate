@@ -4,12 +4,16 @@ import {
   getUserListings,
   test,
   updateUser,
+  getUser,
 } from "../../controllers/user/user.controller.js";
 import { verifyToken } from "../../utils/verifyUser.js";
 
 const router = express.Router();
 
 router.get("/test", test);
+
+// get user
+router.get("/:userId", verifyToken, getUser);
 
 //protected routes --- verify token
 router.post("/update/:id", verifyToken, updateUser);

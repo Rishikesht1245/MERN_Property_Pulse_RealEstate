@@ -20,8 +20,7 @@ export const getConversations = async (req, res, next) => {
   try {
     const conversations = await Conversations.find({
       members: { $in: [req.params.userId] },
-    });
-
+    }).populate("listing");
     res.status(200).json(conversations);
   } catch (error) {
     console.log("error in get all conversations : ", error);
@@ -31,6 +30,8 @@ export const getConversations = async (req, res, next) => {
 
 // add new message
 export const addMessage = async (req, res, next) => {
+  console.log("reached 1");
+
   try {
     const newMessage = new Messages(req.body);
     const savedMessage = await newMessage.save();
@@ -43,7 +44,6 @@ export const addMessage = async (req, res, next) => {
 
 // get all messages in a conversation
 export const getMessages = async (req, res, next) => {
-  console.log("reached");
   try {
     const messages = await Messages.find({
       conversationId: req.params.conversationId,

@@ -12,6 +12,9 @@ export const googleOAuth = async (formData) => {
   return await axios.post("/api/auth/google", formData);
 };
 
+export const getUser = async (userId) => {
+  return await axios.get(`/api/user/${userId}`);
+};
 export const updateUser = async (formData, id) => {
   return await axios.post(`/api/user/update/${id}`, formData);
 };
@@ -42,4 +45,12 @@ export const updateListing = async (formData, listingId) => {
 
 export const getSearchedListings = async (searchQuery) => {
   return await axios.get(`/api/listing/get?${searchQuery}`);
+};
+
+export const getAllConversations = async (userId) => {
+  return await axios.get(`/api/conversation/${userId}`);
+};
+
+export const getAllMessages = async (conversationId) => {
+  return await axios.get(`/api/conversation/messages/${conversationId}`);
 };
