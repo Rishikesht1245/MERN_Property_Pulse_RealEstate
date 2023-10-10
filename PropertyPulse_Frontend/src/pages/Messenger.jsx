@@ -2,11 +2,12 @@ import { useSelector } from "react-redux";
 import Chats from "../components/Chats";
 import PropertyDetails from "../components/PropertyDetails";
 import MessageBox from "../components/MessageBox";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getAllConversations,
   getAllMessages,
   getUser,
+  sendMessage,
 } from "../apiRoutes/userRoutes";
 import toast from "react-hot-toast";
 import Loading from "../components/subcomponents/Loading";
@@ -23,7 +24,9 @@ const Messenger = () => {
   const [loading, setLoading] = useState(false);
   // sender
   const [user, setUser] = useState(null);
-  const [newMessage, setNewMessage] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
+
+  const scorllRef = useRef();
 
   // fetching sender details for showing name and image
   useEffect(() => {
@@ -104,12 +107,44 @@ const Messenger = () => {
     getMessages();
   }, [currentConversation]);
 
+  // sending messages
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const message = {
+      sender: currentUser._id,
+      text: newMessage,
+      conversationId: currentConversation._id,
+    };
+
+    try {
+      const { data } = await sendMessage(message);
+      if (data.success === false) {
+        return toast.error("Something went wrong!", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+      setMessages([...messages, data]);
+      setNewMessage("");
+    } catch (error) {
+      console.log("error in send message", error);
+    }
+  };
+
+  // scrolling to the latest message
+  useEffect(() => {
+    scorllRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return loading ? (
     <Loading />
   ) : (
-    <div className="flex justify-center gap-5 p-10 h-[calc(100vh-40px)]">
+    <div className="flex justify-center gap-5 p-2 sm:p-10 h-[calc(100vh-40px)]">
       {/* chat left bar */}
-      <div className="flex w-1/4 flex-col">
+      <div className="hidden sm:flex w-1/4 flex-col">
         <div className="border flex flex-col border-slate-200 shadow-sm rounded-sm min-h-[calc(100vh-100px)] bg-slate-100 py-2">
           <h3 className="font-semibold text-slate-700 border-b-2 p-2  text-lg">
             Recent Chats
@@ -127,7 +162,7 @@ const Messenger = () => {
         </div>
       </div>
       {/* chat left bar ends */}
-      <div className="flex flex-col w-1/2 border-slate-200 shadow-sm rounded-sm min-h-[calc(100vh-100px)] bg-slate-100">
+      <div className="flex flex-col w-full sm:w-1/2 border-slate-200 shadow-sm rounded-sm min-h-[calc(100vh-100px)] bg-slate-100">
         {currentConversation ? (
           <div className=" relative border flex flex-col  min-h-[calc(100vh-100px)] bg-slate-100 w-full">
             <div className="flex items-center p-2 text-slate-600 font-semibold cursor-pointer border-b-2">
@@ -141,12 +176,14 @@ const Messenger = () => {
 
             <div className="flex flex-col overflow-y-scroll mb-20">
               {messages.map((message) => (
-                <MessageBox
-                  message={message}
-                  own={message.sender === currentUser._id}
-                  currentUser={currentUser}
-                  sender={user}
-                />
+                <div className="" ref={scorllRef}>
+                  <MessageBox
+                    message={message}
+                    own={message.sender === currentUser._id}
+                    currentUser={currentUser}
+                    sender={user}
+                  />
+                </div>
               ))}
             </div>
             {/* send message input box and button */}
@@ -155,10 +192,15 @@ const Messenger = () => {
                 type="text"
                 className="border-none outline-none w-[85%] h-[50px] rounded-[50px] p-3 text-slate-700"
                 name=""
+                value={newMessage}
                 id=""
                 placeholder="Write something..."
+                onChange={(e) => setNewMessage(e.target.value)}
               ></input>
-              <button className="bg-gray-700 w-[40px] h-[40px] p-2 rounded-full flex items-center">
+              <button
+                className="bg-gray-700 w-[40px] h-[40px] p-2 rounded-full flex items-center"
+                onClick={(e) => handleSubmit(e)}
+              >
                 <BsFillSendFill className="text-white text-xl" />
               </button>
             </div>
@@ -174,7 +216,7 @@ const Messenger = () => {
           </div>
         )}
       </div>
-      <div className="flex flex-col w-1/4 border-slate-200 shadow-sm rounded-sm min-h-[calc(100vh-100px)] bg-slate-100">
+      <div className="hidden sm:flex flex-col w-1/4 border-slate-200 shadow-sm rounded-sm min-h-[calc(100vh-100px)] bg-slate-100">
         <div className="border flex flex-col border-slate-200 shadow-sm rounded-sm min-h-[calc(100vh-100px)] bg-slate-100 py-2">
           <h3 className="font-semibold text-slate-700 border-b-2 p-2  text-lg">
             Property Details

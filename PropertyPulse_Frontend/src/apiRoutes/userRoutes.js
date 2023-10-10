@@ -54,3 +54,7 @@ export const getAllConversations = async (userId) => {
 export const getAllMessages = async (conversationId) => {
   return await axios.get(`/api/conversation/messages/${conversationId}`);
 };
+
+export const sendMessage = async (message) => {
+  return await axios.post("/api/conversation/message", message);
+};
