@@ -14,40 +14,83 @@ import Loading from "../components/subcomponents/Loading";
 
 import { BsFillArrowLeftCircleFill, BsFillSendFill } from "react-icons/bs";
 import { FaEnvelopeOpenText } from "react-icons/fa";
+import { io } from "socket.io-client";
+import { useLocation } from "react-router-dom";
 
 const Messenger = () => {
   const [conversations, setConversations] = useState([]);
   // for listings , listing is referenced in conversation
   const { currentUser } = useSelector((state) => state.user);
-  const [currentConversation, setCurrentConversation] = useState(null);
+  const [currentConversation, setCurrentConversation] = useState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   // sender
   const [user, setUser] = useState(null);
   const [newMessage, setNewMessage] = useState("");
-
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+  // for scrolling to the latest message
   const scorllRef = useRef();
+
+  // collecting data from location passed from sigle listing
+  const location = useLocation();
+  console.log(location.state);
+
+  useEffect(() => {
+    setCurrentConversation(location.state);
+  }, [location]);
+
+  // socket connection
+  const socket = useRef();
+
+  // connection and receiving messages
+  useEffect(() => {
+    socket.current = io("ws://localhost:3000");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
+
+  // updating messages when there is arrival messages
+  useEffect(() => {
+    arrivalMessage &&
+      currentConversation?.members.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentConversation]);
+
+  // emitting add user to socket
+  useEffect(() => {
+    socket.current.emit("addUser", currentUser._id);
+    socket.current.on("getUsers", (users) => {
+      console.log(users);
+    });
+  }, [currentUser]);
 
   // fetching sender details for showing name and image
   useEffect(() => {
     // collecting other persons id
     const getUserFromConversation = async () => {
-      const friendId = currentConversation.members.find(
-        (id) => id !== currentUser._id
+      const friendId = currentConversation?.members?.find(
+        (id) => id !== currentUser?._id
       );
 
       try {
-        const { data } = await getUser(friendId);
-        if (data.success === false) {
-          return toast.error("Something went wrong!", {
-            style: {
-              borderRadius: "10px",
-              background: "#333",
-              color: "#fff",
-            },
-          });
+        if (friendId) {
+          const { data } = await getUser(friendId);
+          if (data.success === false) {
+            return toast.error("Something went wrong!", {
+              style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+              },
+            });
+          }
+          setUser(data);
         }
-        setUser(data);
       } catch (error) {
         console.log("error in get user ", error);
       }
@@ -60,7 +103,7 @@ const Messenger = () => {
     const getConversations = async () => {
       try {
         setLoading(true);
-        const { data } = await getAllConversations(currentUser._id);
+        const { data } = await getAllConversations(currentUser?._id);
         if (data.success === false) {
           return toast.error("Something went wrong!", {
             style: {
@@ -88,7 +131,7 @@ const Messenger = () => {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const { data } = await getAllMessages(currentConversation._id);
+        const { data } = await getAllMessages(currentConversation?._id);
         if (data.success === false) {
           return toast.error("Something went wrong!", {
             style: {
@@ -113,8 +156,19 @@ const Messenger = () => {
     const message = {
       sender: currentUser._id,
       text: newMessage,
-      conversationId: currentConversation._id,
+      conversationId: currentConversation?._id,
     };
+
+    const receiverId = currentConversation?.members?.find(
+      (member) => member !== currentUser?._id
+    );
+
+    // sending message to socket server
+    socket.current.emit("sendMessage", {
+      senderId: currentUser._id,
+      receiverId,
+      text: newMessage,
+    });
 
     try {
       const { data } = await sendMessage(message);
@@ -175,16 +229,23 @@ const Messenger = () => {
             </div>
 
             <div className="flex flex-col overflow-y-scroll mb-20">
-              {messages.map((message) => (
-                <div className="" ref={scorllRef}>
-                  <MessageBox
-                    message={message}
-                    own={message.sender === currentUser._id}
-                    currentUser={currentUser}
-                    sender={user}
-                  />
-                </div>
-              ))}
+              {messages.length > 0 ? (
+                messages.map((message) => (
+                  <div className="" ref={scorllRef}>
+                    <MessageBox
+                      message={message}
+                      own={message.sender === currentUser._id}
+                      currentUser={currentUser}
+                      sender={user}
+                      key={message}
+                    />
+                  </div>
+                ))
+              ) : (
+                <span className="text-lg text-semibold text-slate-400 text-center mt-10">
+                  Say hi to {user?.username}
+                </span>
+              )}
             </div>
             {/* send message input box and button */}
             <div className="w-[100%] absolute left-2 bottom-2 flex items-center gap-5">

@@ -3,11 +3,24 @@ import Conversations from "../../models/conversationModel.js";
 
 export const createConversation = async (req, res, next) => {
   try {
+    console.log(req.body);
+    const { userId, ownerId, listingId } = req.body;
+    const existingConversation = await Conversations.findOne({
+      members: { $all: [userId, ownerId] },
+      listing: listingId,
+    }).populate("listing");
+
+    if (existingConversation) {
+      console.log(existingConversation, "===exist");
+      return res.status(200).json(existingConversation);
+    }
+
     const newConversation = new Conversations({
-      members: [req.body.senderId, req.body.receiverId],
+      members: [req.body.userId, req.body.ownerId],
       listing: req.body.listingId,
     });
-    const savedConversation = await newConversation.save();
+    const savedConversation = await newConversation.save().populate("listing");
+    console.log(savedConversation, "===saved");
     res.status(201).json(savedConversation);
   } catch (error) {
     console.log("error in Creating conversations :", error);

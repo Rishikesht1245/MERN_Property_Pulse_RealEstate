@@ -58,3 +58,12 @@ export const getAllMessages = async (conversationId) => {
 export const sendMessage = async (message) => {
   return await axios.post("/api/conversation/message", message);
 };
+
+// create or get existing conversation
+export const getOrCreateConversation = async (userId, ownerId, listingId) => {
+  return await axios.post(`/api/conversation/create`, {
+    userId,
+    ownerId,
+    listingId,
+  });
+};

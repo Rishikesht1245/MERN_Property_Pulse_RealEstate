@@ -27,11 +27,6 @@ mongoose
     console.log("Internal Server error", error);
   });
 
-// listening to port
-const server = app.listen(3000, () => {
-  console.log("Server is running on Port 3000");
-});
-
 //Api routes -- User
 app.use("/api/user", userRouter);
 // Auth routes -- User
@@ -56,6 +51,10 @@ app.use((err, req, res, next) => {
   });
 });
 
+// listening to port
+const server = app.listen(3000, () => {
+  console.log("Server is running on Port 3000");
+});
 //socket configuration
 const io = new SocketIOServer(server, {
   cors: {
@@ -64,6 +63,49 @@ const io = new SocketIOServer(server, {
   },
 });
 
+let users = [];
+
+// only adding users those are already not present in the array.
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId });
+};
+
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+};
+
+const getUser = (receiverId) => {
+  console.log(users);
+  return users.find((user) => user.userId === receiverId);
+};
+
 io.on("connection", (socket) => {
+  //when connection
   console.log("A user connected");
+
+  // take user id and socket id from user
+  socket.on("addUser", (userId) => {
+    console.log("add user");
+    addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  });
+
+  // when client emit sendMessage it will be listened in server and it will fetch the receiver
+  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+    console.log(senderId);
+    console.log(receiverId);
+    console.log(text);
+    console.log("Message arrived");
+    const user = getUser(receiverId);
+    console.log(user);
+    // sending private messages from sender to receiver
+    io.to(user?.socketId).emit("getMessage", { senderId, text });
+  });
+
+  // when user disconnect
+  socket.on("disconnect", (socket) => {
+    console.log(" A user disconnected");
+    removeUser(socket.id);
+  });
 });

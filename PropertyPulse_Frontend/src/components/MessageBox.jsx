@@ -15,18 +15,18 @@ const MessageBox = ({ message, own, currentUser, sender }) => {
       >
         <img
           className="h-[40px] w-[40px] rounded-full object-cover mr-4"
-          src={`${own ? currentUser?.avatar : sender.avatar}`}
+          src={`${own ? currentUser?.avatar : sender?.avatar}`}
           alt=""
         />
         <p className="text-sm font-semibold tracking-wider text-left">
-          {message.text}
+          {message?.text}
         </p>
         <span
           className={`mt-7 text-xs font-semibold text-slate-400 ${
             own ? "ml-5" : "mr-5"
           }`}
         >
-          {format(message.createdAt, "en_US")}
+          {format(message?.createdAt, "en_US")}
         </span>
       </div>
     </div>

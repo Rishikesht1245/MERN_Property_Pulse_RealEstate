@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getListing } from "../apiRoutes/userRoutes";
-import { Link, NavLink, useParams } from "react-router-dom";
+import { getListing, getOrCreateConversation } from "../apiRoutes/userRoutes";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/subcomponents/Button";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
@@ -28,6 +28,7 @@ const SingleListing = () => {
   const [copied, setCopied] = useState(false);
   const [contact, setContact] = useState(false);
   const { listingId } = useParams();
+  const navigate = useNavigate();
 
   const { currentUser } = useSelector((state) => state.user);
 
@@ -52,6 +53,20 @@ const SingleListing = () => {
 
     fetchListing();
   }, [listingId]);
+
+  const handleChatIconClick = async () => {
+    try {
+      const { data } = await getOrCreateConversation(
+        currentUser._id,
+        listing.userRef._id,
+        listingId
+      );
+      console.log(data);
+      navigate("/chats", { state: data });
+    } catch (error) {
+      console.log("Error in create or get conversation :", error);
+    }
+  };
 
   return (
     <main>
@@ -104,7 +119,8 @@ const SingleListing = () => {
             />
           </div>
           <div className="absolute top-[35%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
-            <NavLink
+            <span
+              onClick={handleChatIconClick}
               to="/chats"
               className={(navClass) =>
                 navClass.isActive
@@ -116,7 +132,7 @@ const SingleListing = () => {
                 title="Chat with owner"
                 className="text-xl hover:text-blue-500 font-bold"
               />
-            </NavLink>
+            </span>
           </div>
           {/* copied message */}
           {copied && (
