@@ -271,7 +271,7 @@ const Messenger = () => {
                       own={message.sender === currentUser._id}
                       currentUser={currentUser}
                       sender={user}
-                      key={message?._id}
+                      key={message?.createdAt}
                     />
                   </div>
                 ))

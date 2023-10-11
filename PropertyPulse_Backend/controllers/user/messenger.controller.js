@@ -35,7 +35,10 @@ export const getConversations = async (req, res, next) => {
   try {
     const conversations = await Conversations.find({
       members: { $in: [req.params.userId] },
-    }).populate("listing");
+    })
+      .sort({ createdAt: -1 })
+      .populate("listing");
+    console.log(conversations);
     res.status(200).json(conversations);
   } catch (error) {
     console.log("error in get all conversations : ", error);
