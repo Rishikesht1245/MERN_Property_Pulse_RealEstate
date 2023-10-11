@@ -8,7 +8,7 @@ const PropertyDetails = ({ listing }) => {
         <Link to={`/listing/${listing._id}`}>
           <div className="flex flex-col items-center p-2 text-slate-600 font-semibold cursor-pointer mt-2">
             <img
-              className="h-[full] w-[full] object-contain mr-4"
+              className="h-[full] w-[full] object-contain mx-4"
               src={`${listing.imageUrls[0]}`}
               alt="profile image"
             />

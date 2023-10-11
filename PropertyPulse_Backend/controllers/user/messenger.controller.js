@@ -19,7 +19,9 @@ export const createConversation = async (req, res, next) => {
       members: [req.body.userId, req.body.ownerId],
       listing: req.body.listingId,
     });
-    const savedConversation = await newConversation.save().populate("listing");
+    let savedConversation = await newConversation.save();
+    await savedConversation.populate("listing");
+
     console.log(savedConversation, "===saved");
     res.status(201).json(savedConversation);
   } catch (error) {

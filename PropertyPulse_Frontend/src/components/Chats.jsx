@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getUser } from "../apiRoutes/userRoutes";
+import { Link } from "react-router-dom";
 
 const Chats = ({ conversation, currentUser, onClick }) => {
   const [user, setUser] = useState({});
@@ -10,8 +11,10 @@ const Chats = ({ conversation, currentUser, onClick }) => {
       const friendId = conversation.members.find(
         (id) => id !== currentUser._id
       );
-      const { data } = await getUser(friendId);
-      setUser(data);
+      if (friendId) {
+        const { data } = await getUser(friendId);
+        setUser(data);
+      }
     };
     getUserFromConversation();
   }, [currentUser?._id]);
@@ -25,7 +28,18 @@ const Chats = ({ conversation, currentUser, onClick }) => {
         src={`${user?.avatar}`}
         alt="profile image"
       />
-      <span className="text-sm">{user?.username}</span>
+      <span className="text-sm line-clamp-1">
+        {user?.username}{" "}
+        <span className="sm:hidden inline">
+          -{" "}
+          <Link
+            to={`/listing/${conversation?.listing._id}`}
+            className="hover:underline "
+          >
+            {conversation.listing.name}
+          </Link>
+        </span>
+      </span>
     </div>
   ) : (
     <p className="text-sm font-semibold text-slate-700 p-3 mt-5 text-center">

@@ -67,8 +67,15 @@ let users = [];
 
 // only adding users those are already not present in the array.
 const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
+  if (!users.some((user) => user.userId === userId)) {
     users.push({ userId, socketId });
+  } else {
+    users = users.map((user) => {
+      if (user.userId === userId) {
+        return { ...user, socketId };
+      } else return user;
+    });
+  }
 };
 
 const removeUser = (socketId) => {
@@ -76,8 +83,8 @@ const removeUser = (socketId) => {
 };
 
 const getUser = (receiverId) => {
-  console.log(users);
-  return users.find((user) => user.userId === receiverId);
+  const user = users.find((user) => user.userId === receiverId);
+  return user;
 };
 
 io.on("connection", (socket) => {
@@ -86,21 +93,15 @@ io.on("connection", (socket) => {
 
   // take user id and socket id from user
   socket.on("addUser", (userId) => {
-    console.log("add user");
     addUser(userId, socket.id);
     io.emit("getUsers", users);
   });
 
   // when client emit sendMessage it will be listened in server and it will fetch the receiver
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-    console.log(senderId);
-    console.log(receiverId);
-    console.log(text);
-    console.log("Message arrived");
+  socket.on("sendMessage", ({ senderId, receiverId, listingId, text }) => {
     const user = getUser(receiverId);
-    console.log(user);
     // sending private messages from sender to receiver
-    io.to(user?.socketId).emit("getMessage", { senderId, text });
+    io.to(user?.socketId).emit("getMessage", { senderId, listingId, text });
   });
 
   // when user disconnect
