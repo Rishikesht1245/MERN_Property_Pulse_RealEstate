@@ -4,6 +4,7 @@ import userRouter from "./routes/user/user.routes.js";
 import authRouter from "./routes/user/auth.routes.js";
 import listingRouter from "./routes/user/listing.routes.js";
 import messengerRoutes from "./routes/user/messenger.routes.js";
+import adminRoutes from "./routes/admin/admin.routes.js";
 import cookieParser from "cookie-parser";
 import { Server as SocketIOServer } from "socket.io";
 import dotenv from "dotenv";
@@ -35,6 +36,9 @@ app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 // messenger routes
 app.use("/api/conversation", messengerRoutes);
+
+// admin routes
+app.use("/api/admin", adminRoutes);
 
 // middleware for error handling
 app.use((err, req, res, next) => {

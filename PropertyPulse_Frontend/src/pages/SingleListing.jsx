@@ -61,7 +61,6 @@ const SingleListing = () => {
         listing.userRef._id,
         listingId
       );
-      console.log(data);
       navigate("/chats", { state: data });
     } catch (error) {
       console.log("Error in create or get conversation :", error);
