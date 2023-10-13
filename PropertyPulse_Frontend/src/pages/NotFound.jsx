@@ -13,7 +13,7 @@ const NotFound = () => {
       className="flex flex-col bg-[top_right_-20rem] md:bg-center bg-fixed"
     >
       <div className="flex justify-center items-center grow">
-        <div className="bg-slate-200 rounded-lg w-[50%] py-5 flex flex-col justify-center items-center">
+        <div className="bg-slate-200 rounded-lg w-[90%] sm:w-[50%] py-5 flex flex-col justify-center items-center">
           <img
             className="max-w-[200px] w-full mx-auto mt-10"
             src={

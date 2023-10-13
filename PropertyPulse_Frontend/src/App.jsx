@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -15,12 +20,20 @@ import NotFound from "./pages/NotFound";
 import { Footer } from "./components/Footer";
 import Messenger from "./pages/Messenger";
 
+import AdminSignIn from "./pages/admin/SignIn";
+import AdminHeader from "./components/AdminHeader";
+import AdminPrivateRoute from "./components/AdminPrivateRoute";
+import Users from "./pages/admin/Users";
+
 export default function App() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      <Header />
+      {isAdmin ? <AdminHeader /> : <Header />}
       <Routes>
+        {/* user Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
@@ -41,6 +54,12 @@ export default function App() {
         {/* search */}
         <Route path="/search" element={<Search />} />
         <Route path="/*" element={<NotFound />} />
+
+        {/* admin Routes */}
+        <Route path="/admin/sign-in" element={<AdminSignIn />} />
+        <Route element={<AdminPrivateRoute />}>
+          <Route path="/admin/users" element={<Users />} />
+        </Route>
       </Routes>
       <Footer />
     </>

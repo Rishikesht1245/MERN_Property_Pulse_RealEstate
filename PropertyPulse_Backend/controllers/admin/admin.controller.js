@@ -36,10 +36,17 @@ export const signIn = async (req, res, next) => {
     const { password: pass, ...rest } = adminCheck._doc;
     const token = jwt.sign({ id: adminCheck._id }, process.env.JWT_SECRET);
 
-    res.cookie("admin_token", token).status(200).json(rest);
-
-    return res.status(200).json(adminCheck);
+    res
+      .cookie("admin_token", token, {
+        //deny third party applications for security
+        httpOnly: true,
+        // //time in seconds
+        // expires: new Date(Date.now() + 24 * 60 * 60),
+      })
+      .status(200)
+      .json(rest);
   } catch (error) {
     console.log("error in Admin sign In : ", error);
+    next(error);
   }
 };
