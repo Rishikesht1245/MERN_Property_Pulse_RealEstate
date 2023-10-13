@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Admins from "../../models/admin.model.js";
 import { errorHandler } from "../../utils/error.js";
+import User from "../../models/user.model.js";
 
 export const createAdmin = async (req, res, next) => {
   try {
@@ -47,6 +48,17 @@ export const signIn = async (req, res, next) => {
       .json(rest);
   } catch (error) {
     console.log("error in Admin sign In : ", error);
+    next(error);
+  }
+};
+
+//  get all users
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().sort({ createdAt: -1 });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log("Error in get all users : ", error);
     next(error);
   }
 };
