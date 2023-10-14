@@ -43,7 +43,7 @@ app.use("/api/conversation", messengerRoutes);
 app.use("/api/admin", adminRoutes);
 
 // for deployment
-app.use(express.static(path.join(__dirname, "PropertyPulse_Frontend/dist")));
+app.use(express.static(path.join(__dirname, "/PropertyPulse_Frontend/dist")));
 
 app.get("*", (req, res) => {
   res.sendFile(
