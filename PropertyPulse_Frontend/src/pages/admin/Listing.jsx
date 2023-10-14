@@ -5,7 +5,6 @@ import {
   blockOrUnblockListing,
 } from "../../apiRoutes/adminRoutes";
 import Loading from "../../components/subcomponents/Loading";
-import Button from "../../components/subcomponents/Button";
 import toast from "react-hot-toast";
 
 const Users = () => {
@@ -69,14 +68,14 @@ const Users = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <Button
+        <button
           className={`${
             row.isBlocked ? "bg-green-600" : "bg-red-600"
-          } p-1 w-full`}
+          } text-white w-full p-2 rounded-lg text-lg font-semibold`}
           onClick={() => handleBlock(row)}
         >
           {row.isBlocked ? "Unblock" : "Block"}
-        </Button>
+        </button>
       ),
     },
   ];
