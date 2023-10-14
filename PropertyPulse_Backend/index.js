@@ -7,9 +7,11 @@ import messengerRoutes from "./routes/user/messenger.routes.js";
 import adminRoutes from "./routes/admin/admin.routes.js";
 import cookieParser from "cookie-parser";
 import { Server as SocketIOServer } from "socket.io";
+import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
 
+const __dirname = path.resolve();
 const app = express();
 
 // allowing json inputs
@@ -39,6 +41,15 @@ app.use("/api/conversation", messengerRoutes);
 
 // admin routes
 app.use("/api/admin", adminRoutes);
+
+// for deployment
+app.use(express.static(path.join(__dirname, "PropertyPulse_Frontend/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "PropertyPulse_Frontend", "dist", "index.html")
+  );
+});
 
 // middleware for error handling
 app.use((err, req, res, next) => {
