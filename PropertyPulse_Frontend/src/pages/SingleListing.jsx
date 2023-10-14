@@ -111,28 +111,32 @@ const SingleListing = () => {
             />
           </div>
           {/* wishlist implementation pending */}
-          <div className="absolute top-[25%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
-            <FaHeart
-              className="text-lg text-gray-600 hover:text-red-500"
-              title="Add to wishlist"
-            />
-          </div>
-          <div className="absolute top-[35%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
-            <span
-              onClick={handleChatIconClick}
-              to="/chats"
-              className={(navClass) =>
-                navClass.isActive
-                  ? "text-slate-700 text-[16px]  font-semibold  hover:underline"
-                  : "text-slate-500 text-[16px] font-semibold hover:underline"
-              }
-            >
-              <PiChatsBold
-                title="Chat with owner"
-                className="text-xl hover:text-blue-500 font-bold"
+          {currentUser && listing.userRef._id !== currentUser._id && (
+            <div className="absolute top-[25%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
+              <FaHeart
+                className="text-lg text-gray-600 hover:text-red-500"
+                title="Add to wishlist"
               />
-            </span>
-          </div>
+            </div>
+          )}
+          {currentUser && listing.userRef._id !== currentUser._id && (
+            <div className="absolute top-[35%] right-[3%] bg-white p-3 rounded-full z-10 cursor-pointer">
+              <span
+                onClick={handleChatIconClick}
+                to="/chats"
+                className={(navClass) =>
+                  navClass.isActive
+                    ? "text-slate-700 text-[16px]  font-semibold  hover:underline"
+                    : "text-slate-500 text-[16px] font-semibold hover:underline"
+                }
+              >
+                <PiChatsBold
+                  title="Chat with owner"
+                  className="text-xl hover:text-blue-500 font-bold"
+                />
+              </span>
+            </div>
+          )}
           {/* copied message */}
           {copied && (
             <p className="fixed font-semibold top-[25%] right-[5%] z-10 rounded-md bg-slate-100 p-2 px-5">

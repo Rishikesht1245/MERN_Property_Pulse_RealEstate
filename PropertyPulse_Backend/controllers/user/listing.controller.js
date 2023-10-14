@@ -69,8 +69,6 @@ export const getListing = async (req, res, next) => {
 // search sort and filter single function
 export const getListings = async (req, res, next) => {
   try {
-    console.log("reached");
-    console.log(req.query);
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
 
@@ -115,7 +113,6 @@ export const getListings = async (req, res, next) => {
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex);
-    console.log("end");
     return res.status(200).json(listing);
   } catch (error) {
     console.log("Error in Get Listing");
