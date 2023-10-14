@@ -1,6 +1,7 @@
-import { error } from "console";
+import mongoose from "mongoose";
 import Listing from "../../models/listing.model.js";
 import { errorHandler } from "../../utils/error.js";
+import { raw } from "express";
 
 export const createListing = async (req, res, next) => {
   try {
@@ -14,11 +15,12 @@ export const createListing = async (req, res, next) => {
 
 export const deleteListing = async (req, res, next) => {
   try {
-    const listing = await Listing.findById(req.params.id);
+    const listing = await Listing.findById(req.params.id).populate("userRef");
     if (!listing) return next(errorHandler(404, "Listing not found!"));
 
-    // checking if user is the owner of listing
-    if (req.user.id !== listing.userRef)
+    console.log(req.user.id);
+    console.log(listing.userRef._id);
+    if (req.user.id != listing.userRef._id)
       return next(errorHandler(401, "You can only delete your own listing!"));
 
     // deleting the listing
@@ -31,11 +33,11 @@ export const deleteListing = async (req, res, next) => {
 };
 
 export const updateListing = async (req, res, next) => {
-  const listing = await Listing.findById(req.params.id);
+  const listing = await Listing.findById(req.params.id).populate("userRef");
   if (!listing) {
     return next(errorHandler(404, "Listing not found!"));
   }
-  if (req.user.id !== listing.userRef) {
+  if (req.user.id != listing.userRef._id) {
     return next(errorHandler(401, "You can only update your own listings!"));
   }
 
