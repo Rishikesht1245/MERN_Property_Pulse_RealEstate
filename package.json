@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon PropertyPulse_Backend/index.js",
     "start": "node PropertyPulse_Backend/index.js",
-    "build": "npm install && npm install PropertyPulse_Frontend && npm run build --prefix PropertyPulse_Frontend"
+    "build": "npm install && npm install --prefix PropertyPulse_Frontend && npm run build --prefix PropertyPulse_Frontend"
   },
   "keywords": [],
   "author": "",
