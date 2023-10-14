@@ -48,11 +48,11 @@ export default function App() {
             path="/update-listing/:listingId"
             element={<UpdateListing />}
           />
-          <Route path="/listing/:listingId" element={<SingleListing />} />
           <Route path="/chats" element={<Messenger />} />
         </Route>
 
         {/* search */}
+        <Route path="/listing/:listingId" element={<SingleListing />} />
         <Route path="/search" element={<Search />} />
         <Route path="/*" element={<NotFound />} />
 

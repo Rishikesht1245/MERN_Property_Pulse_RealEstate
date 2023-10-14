@@ -6,6 +6,7 @@ import {
 } from "../../apiRoutes/adminRoutes";
 import Loading from "../../components/subcomponents/Loading";
 import toast from "react-hot-toast";
+import ShowConfirm from "../../components/subcomponents/ShowConfirm";
 
 const Users = () => {
   const [listings, setListings] = useState(null);
@@ -68,14 +69,19 @@ const Users = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <button
-          className={`${
-            row.isBlocked ? "bg-green-600" : "bg-red-600"
-          } text-white w-full p-2 rounded-lg text-lg font-semibold`}
-          onClick={() => handleBlock(row)}
+        <ShowConfirm
+          message={`Are you sure to block ${row.name} ?`}
+          handleFunction={handleBlock}
+          params={row}
         >
-          {row.isBlocked ? "Unblock" : "Block"}
-        </button>
+          <button
+            className={`${
+              row.isBlocked ? "bg-green-600" : "bg-red-600"
+            } text-white w-[100px] p-2 rounded-lg text-lg font-semibold`}
+          >
+            {row.isBlocked ? "Unblock" : "Block"}
+          </button>
+        </ShowConfirm>
       ),
     },
   ];
