@@ -1,8 +1,36 @@
-import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { signOut } from "../redux/admin/adminSlice";
 
 export default function AdminHeader() {
   const { currentAdmin } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    const { data } = await axios.get("/api/admin/signout");
+    if (data.success === false) {
+      dispatch(signOutFailure(data.message));
+      return toast.error("something went wrong!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
+    dispatch(signOut());
+    toast.success(data, {
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
+    return navigate("/admin/sign-in");
+  };
 
   return (
     <header className="bg-slate-200 shadow-md sticky top-0 z-20">
@@ -41,7 +69,10 @@ export default function AdminHeader() {
           </li>
           <li>
             {currentAdmin ? (
-              <span className="text-slate-500 text-[16px] font-semibold hover:underline">
+              <span
+                className="text-slate-500 text-[16px] font-semibold hover:underline"
+                onClick={handleSignOut}
+              >
                 Sign Out
               </span>
             ) : (

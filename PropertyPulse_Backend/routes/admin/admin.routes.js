@@ -6,6 +6,7 @@ import {
   signIn,
   getAllListings,
   blockOrUnblockListing,
+  signOut,
 } from "../../controllers/admin/admin.controller.js";
 import { verifyToken } from "../../utils/verifyAdmin.js";
 
@@ -22,5 +23,7 @@ router.put("/users/:userId/:action", verifyToken, blockOrUnblockUser);
 router.get("/listings", verifyToken, getAllListings);
 
 router.put("/listings/:listingId/:action", verifyToken, blockOrUnblockListing);
+
+router.get("/signout", verifyToken, signOut);
 
 export default router;

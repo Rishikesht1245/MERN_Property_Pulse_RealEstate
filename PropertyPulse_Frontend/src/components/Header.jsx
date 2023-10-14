@@ -112,8 +112,8 @@ export default function Header() {
                 to="/sign-in"
                 className={(navClass) =>
                   navClass.isActive
-                    ? "text-slate-700  sm:text-[16px] font-semibold hover:underline"
-                    : "text-slate-500  sm:text-[16px] font-semibold hover:underline"
+                    ? "text-slate-700 text-14px sm:text-[16px] font-semibold hover:underline"
+                    : "text-slate-500 text-14px sm:text-[16px] font-semibold hover:underline"
                 }
               >
                 Sign In

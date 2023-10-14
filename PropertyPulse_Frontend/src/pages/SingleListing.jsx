@@ -41,7 +41,7 @@ const SingleListing = () => {
           setLoading(false);
           return setError(true);
         }
-
+        console.log(data);
         setListing(data);
         setLoading(false);
         setError(false);
@@ -66,7 +66,6 @@ const SingleListing = () => {
       console.log("Error in create or get conversation :", error);
     }
   };
-
   return (
     <main>
       {loading && <Loading />}
