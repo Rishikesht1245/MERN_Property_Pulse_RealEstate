@@ -6,6 +6,7 @@ import { signOut } from "../redux/admin/adminSlice";
 
 export default function AdminHeader() {
   const { currentAdmin } = useSelector((state) => state.admin);
+  console.log(currentAdmin);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -68,14 +69,7 @@ export default function AdminHeader() {
             </NavLink>
           </li>
           <li>
-            {currentAdmin ? (
-              <span
-                className="text-slate-500 text-[16px] font-semibold hover:underline"
-                onClick={handleSignOut}
-              >
-                Sign Out
-              </span>
-            ) : (
+            {!currentAdmin ? (
               <NavLink
                 to="/admin/sign-in"
                 className={(navClass) =>
@@ -86,6 +80,13 @@ export default function AdminHeader() {
               >
                 Sign In
               </NavLink>
+            ) : (
+              <span
+                className="text-slate-500 text-[16px] font-semibold hover:underline"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </span>
             )}
           </li>
         </ul>
