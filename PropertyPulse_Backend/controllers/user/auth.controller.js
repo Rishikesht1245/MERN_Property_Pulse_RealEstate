@@ -9,7 +9,7 @@ export const signup = async (req, res, next) => {
   //encrypting password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const userCheck = await User.find({ email });
+  const userCheck = await User.findOne({ email });
   if (userCheck)
     return next(errorHandler(409, "User already exists Please login"));
 
