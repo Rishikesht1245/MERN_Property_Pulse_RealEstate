@@ -55,6 +55,10 @@ const listingSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

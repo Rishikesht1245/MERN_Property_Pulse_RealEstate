@@ -91,6 +91,17 @@ export const blockOrUnblockUser = async (req, res, next) => {
   }
 };
 
+//  get all listings
+export const getAllListings = async (req, res, next) => {
+  try {
+    const listings = await Listing.find().sort({ createdAt: -1 });
+    res.status(200).json(listings);
+  } catch (error) {
+    console.log("Error in get all users : ", error);
+    next(error);
+  }
+};
+
 export const blockOrUnblockListing = async (req, res, next) => {
   const { listingId, action } = req.params;
 
@@ -106,11 +117,11 @@ export const blockOrUnblockListing = async (req, res, next) => {
       { new: true }
     );
 
-    const actionText = updatedUser.isBlocked ? "Blocked" : "Unblocked";
+    const actionText = updatedListing.isBlocked ? "Blocked" : "Unblocked";
 
     res.status(200).json({
       message: `Listing has been ${actionText} successfully!`,
-      updatedUser,
+      updatedListing,
     });
   } catch (error) {
     console.log("Error in Block or Unblock Listing : ", error);

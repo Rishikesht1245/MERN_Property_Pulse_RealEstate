@@ -11,3 +11,11 @@ export const getAllUsers = async () => {
 export const blockOrUnblockUser = async (id, action) => {
   return await axios.put(`/api/admin/users/${id}/${action}`);
 };
+
+export const getAllListings = async () => {
+  return await axios.get("/api/admin/listings");
+};
+
+export const blockOrUnblockListing = async (id, action) => {
+  return await axios.put(`/api/admin/listings/${id}/${action}`);
+};

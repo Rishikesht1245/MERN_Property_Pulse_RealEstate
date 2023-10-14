@@ -24,6 +24,7 @@ import AdminSignIn from "./pages/admin/SignIn";
 import AdminHeader from "./components/AdminHeader";
 import AdminPrivateRoute from "./components/AdminPrivateRoute";
 import Users from "./pages/admin/Users";
+import Listing from "./pages/admin/Listing";
 
 export default function App() {
   const location = useLocation();
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="/admin/sign-in" element={<AdminSignIn />} />
         <Route element={<AdminPrivateRoute />}>
           <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/listings" element={<Listing />} />
         </Route>
       </Routes>
       <Footer />
