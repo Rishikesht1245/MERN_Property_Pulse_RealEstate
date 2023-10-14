@@ -92,13 +92,21 @@ const SignIn = () => {
             </Form>
           )}
         </Formik>
-        <div className="flex gap-1 sm:gap-2 items-center ml-1 mt-5 tracking-widest">
-          <p className="text-sm font-semibold">Don't have an account?</p>
+        <div className="flex gap-1 sm:gap-2 items-center ml-1 mt-5 tracking-widest justify-between">
+          <p className="text-sm font-semibold">
+            Don't have an account?{" "}
+            <Link
+              to={"/sign-up"}
+              className="text-blue-700 text-sm font-semibold tracking-normal"
+            >
+              Sign Up
+            </Link>
+          </p>
           <Link
-            to={"/sign-up"}
-            className="text-blue-700 text-sm font-semibold tracking-normal"
+            to={"/admin/sign-in"}
+            className="text-blue-700 text-sm font-semibold tracking-normal text-end"
           >
-            Sign Up
+            Admin Sign In ➡️
           </Link>
         </div>
       </div>

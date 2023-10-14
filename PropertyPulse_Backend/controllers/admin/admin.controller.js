@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import Admins from "../../models/admin.model.js";
 import { errorHandler } from "../../utils/error.js";
 import User from "../../models/user.model.js";
+import Listing from "../../models/listing.model.js";
 
 export const createAdmin = async (req, res, next) => {
   try {
@@ -59,6 +60,60 @@ export const getAllUsers = async (req, res, next) => {
     res.status(200).json(users);
   } catch (error) {
     console.log("Error in get all users : ", error);
+    next(error);
+  }
+};
+
+export const blockOrUnblockUser = async (req, res, next) => {
+  const { userId, action } = req.params;
+
+  try {
+    if (action !== "block" && action !== "unblock") {
+      return res.status(400).json({ message: "Invalid action" });
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        isBlocked: action === "block",
+      },
+      { new: true }
+    );
+
+    const actionText = updatedUser.isBlocked ? "Blocked" : "Unblocked";
+
+    res.status(200).json({
+      message: `User has been ${actionText} successfully!`,
+      updatedUser,
+    });
+  } catch (error) {
+    console.log("Error in Block or Unblock User : ", error);
+    next(error);
+  }
+};
+
+export const blockOrUnblockListing = async (req, res, next) => {
+  const { listingId, action } = req.params;
+
+  try {
+    if (action !== "block" && action !== "unblock") {
+      return res.status(400).json({ message: "Invalid action" });
+    }
+    const updatedListing = await Listing.findByIdAndUpdate(
+      listingId,
+      {
+        isBlocked: action === "block",
+      },
+      { new: true }
+    );
+
+    const actionText = updatedUser.isBlocked ? "Blocked" : "Unblocked";
+
+    res.status(200).json({
+      message: `Listing has been ${actionText} successfully!`,
+      updatedUser,
+    });
+  } catch (error) {
+    console.log("Error in Block or Unblock Listing : ", error);
     next(error);
   }
 };

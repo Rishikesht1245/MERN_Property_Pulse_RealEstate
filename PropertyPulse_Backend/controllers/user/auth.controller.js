@@ -32,6 +32,8 @@ export const singIn = async (req, res, next) => {
 
     // passing the custom error function to middleware
     if (!validUser) return next(errorHandler(404, "User Not Found"));
+    if (validUser.isBlocked)
+      return next(errorHandler(404, "User is Not Authorized"));
 
     // compare password
     const validPassword = await bcrypt.compare(password, validUser.password);
