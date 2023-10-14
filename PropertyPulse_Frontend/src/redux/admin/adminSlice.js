@@ -12,7 +12,7 @@ const adminSlice = createSlice({
       state.currentAdmin = action.payload;
     },
     signOut: (state) => {
-      state.currentUser = null;
+      state.currentAdmin = null;
     },
   },
 });
