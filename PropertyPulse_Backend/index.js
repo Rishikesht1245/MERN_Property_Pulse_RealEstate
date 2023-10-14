@@ -39,7 +39,6 @@ app.use("/api/listing", listingRouter);
 // messenger routes
 app.use("/api/conversation", messengerRoutes);
 
-// admin routes
 app.use("/api/admin", adminRoutes);
 
 // for deployment
